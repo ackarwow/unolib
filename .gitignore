@@ -1,0 +1,11 @@
+# compiled files
+*.bin
+*.elf
+*.hex
+
+#pascal compiled files
+*.o
+*.ppu
+
+!info.txt
+!*.pas
