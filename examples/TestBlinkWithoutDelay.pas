@@ -9,7 +9,7 @@ program TestBlinkWithoutDelay;
   modified 13 Oct 2024 by Andrzej Karwowski
 }
 
-{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano))}
+{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
  {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
 {$ENDIF}
 
