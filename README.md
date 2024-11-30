@@ -37,6 +37,14 @@ display
 display
  - TestSerial.pas - sends and receives data via the serial port
 
+Some extra code is placed in "extras" directory:
+
+ - ccrause_blink_leonardo.pas - blink example for Arduino Leonardo based on code written by @ccrause
+ - ccrause_delay.pas - delay module based on code written by @ccrause
+ - cdc.pas - CDC support for Arduino Leonardo
+ - usb.pas - USB support for Arduino Leonardo
+ - wdt.pas - watchdog timer routines
+
 Before compiling a given program, make sure that the library modules listed in the uses section
 have already been compiled.
 
