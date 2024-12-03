@@ -147,22 +147,22 @@ const
 function ByteToHex(val: UInt8): shortstring;
 //procedure ByteToStr(val: UInt8; var s: string; Digits: UInt8=3);
 
-function BitIsSet(const aSfrp: PUInt8; const aBit: UInt8): boolean;
-function BitIsClear(const aSfrp: PUInt8; const aBit: UInt8): boolean;
-procedure BitClear(var value: UInt8; const bit: UInt8);
-function BitRead(const value, bit: UInt8): UInt8;
-procedure BitSet(var value: UInt8; const bit: UInt8);
-procedure BitWrite(var value: UInt8; const bit, bitvalue: UInt8);
-function _BV(const aBit: UInt8): UInt8;
+function BitIsSet(const aSfrp: PUInt8; const aBit: UInt8): boolean; inline;
+function BitIsClear(const aSfrp: PUInt8; const aBit: UInt8): boolean; inline;
+procedure BitClear(var value: UInt8; const bit: UInt8); inline;
+function BitRead(const value, bit: UInt8): UInt8; inline;
+procedure BitSet(var value: UInt8; const bit: UInt8); inline;
+procedure BitWrite(var value: UInt8; const bit, bitvalue: UInt8); inline;
+function _BV(const aBit: UInt8): UInt8; inline;
 
-procedure Cbi(const aSfrp: PUInt8; const aBit: UInt8);
-procedure Sbi(const aSfrp: PUInt8; const aBit: UInt8);
+procedure Cbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
+procedure Sbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
 procedure Cli; assembler;
 procedure Sei; assembler;
 
-function PortModeRegister(const aPort: UInt8): PUInt8;
-function PortInputRegister(const aPort: UInt8): PUint8;
-function PortOutputRegister(const aPort: UInt8): PUint8;
+function PortModeRegister(const aPort: UInt8): PUInt8; inline;
+function PortInputRegister(const aPort: UInt8): PUint8; inline;
+function PortOutputRegister(const aPort: UInt8): PUint8; inline;
 
 implementation
 
@@ -228,7 +228,7 @@ begin
 end;}
 
 
-function BitIsSet(const aSfrp: PUInt8; const aBit: UInt8): boolean;
+function BitIsSet(const aSfrp: PUInt8; const aBit: UInt8): boolean;  inline;
 begin
   Result:=(aSfrp^ and _BV(aBit))>0;
 end;
@@ -236,27 +236,27 @@ end;
 //Test whether bit \c bit in IO register \c sfr is clear.
 //This will return non-zero if the bit is clear, and a 0
 //if the bit is set.
-function BitIsClear(const aSfrp: PUInt8; const aBit: UInt8): boolean;
+function BitIsClear(const aSfrp: PUInt8; const aBit: UInt8): boolean; inline;
 begin
   Result:=(aSfrp^ and _BV(aBit))=0;
 end;
 
-procedure BitClear(var value: UInt8; const bit: UInt8);
+procedure BitClear(var value: UInt8; const bit: UInt8); inline;
 begin
   value:=value and not (1 shl bit);
 end;
 
-function BitRead(const value, bit: UInt8): UInt8;
+function BitRead(const value, bit: UInt8): UInt8; inline;
 begin
   Result:=(((value) shr (bit)) and $01);
 end;
 
-procedure BitSet(var value: UInt8; const bit: UInt8);
+procedure BitSet(var value: UInt8; const bit: UInt8); inline;
 begin
   value:=value or UInt8(1 shl bit);
 end;
 
-procedure BitWrite(var value: UInt8; const bit, bitvalue: UInt8);
+procedure BitWrite(var value: UInt8; const bit, bitvalue: UInt8); inline;
 begin
   if bitvalue>0 then
     BitSet(value, bit)
@@ -265,18 +265,18 @@ begin
 end;
 
 //sfr_defs.h
-function _BV(const aBit: UInt8): UInt8;
+function _BV(const aBit: UInt8): UInt8; inline;
 begin
   Result:=1 shl aBit;
 end;
 
 //wiring_private.h
-procedure Cbi(const aSfrp: PUInt8; const aBit: UInt8);
+procedure Cbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
 begin
   aSfrp^:=aSfrp^ and not _BV(aBit);
 end;
 
-procedure Sbi(const aSfrp: PUInt8; const aBit: UInt8);
+procedure Sbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
 begin
   aSfrp^:=aSfrp^ or _BV(aBit);
 end;
@@ -294,7 +294,7 @@ asm
 end;
 
 //pins_arduino.h
-function PortModeRegister(const aPort: UInt8): PUInt8;
+function PortModeRegister(const aPort: UInt8): PUInt8; inline;
 begin
   case aPort of
   0: Result:=Pointer(NOT_A_PORT);
@@ -305,7 +305,7 @@ begin
   end;
 end;
 
-function PortInputRegister(const aPort: UInt8): PUint8;
+function PortInputRegister(const aPort: UInt8): PUint8; inline;
 begin
   case aPort of
   0: Result:=Pointer(NOT_A_PORT);
@@ -317,7 +317,7 @@ begin
 end;
 
 //pins_arduino.h
-function PortOutputRegister(const aPort: UInt8): PUint8;
+function PortOutputRegister(const aPort: UInt8): PUint8; inline;
 begin
   case aPort of
   0: Result:=Pointer(NOT_A_PORT);

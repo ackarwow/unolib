@@ -32,8 +32,8 @@ var
   timer0_overflow_count: UInt32 = 0; public; //volatile()
   timer0_fract: UInt8 = 0; public;//volatile()
 
-function ClockCyclesToMicroseconds(aCnt: UInt32): UInt32;
-function MicrosecondsToClockCycles(aCnt: UInt32): UInt32;
+function ClockCyclesToMicroseconds(aCnt: UInt32): UInt32; inline;
+function MicrosecondsToClockCycles(aCnt: UInt32): UInt32; inline;
 
 function Micros: UInt32;
 function Millis: UInt32;
@@ -82,12 +82,12 @@ begin
   end['r18','r24','r25'];
 end;
 
-function ClockCyclesToMicroseconds(aCnt: UInt32): UInt32;
+function ClockCyclesToMicroseconds(aCnt: UInt32): UInt32; inline;
 begin
   Result:=aCnt div clockCyclesPerMicrosecond{16};
 end;
 
-function MicrosecondsToClockCycles(aCnt: UInt32): UInt32;
+function MicrosecondsToClockCycles(aCnt: UInt32): UInt32; inline;
 begin
   Result:=(aCnt * clockCyclesPerMicrosecond);
 end;
