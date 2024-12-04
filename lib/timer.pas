@@ -11,7 +11,10 @@ unit timer;
 {
   Based on Arduino library source
   ported to Pascal by Andrzej Karwowski 2021
-  modified 13 Oct 2024 by Andrzej Karwowski
+  
+  - modified 13 Oct 2024 by Andrzej Karwowski
+
+  - modified 3 Dec 2024 by Andrzej Karwowski (inlined routines: ClockCyclesToMicroseconds, MicrosecondsToClockCycles)
 }
 
 interface

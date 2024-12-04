@@ -9,6 +9,14 @@ unit defs;
 {
   Based on Arduino library source
   ported to Pascal by Andrzej Karwowski 2021
+
+  - modified 3 Dec 2024 by Andrzej Karwowski (inlined routines: BitIsSet, BitIsClear,
+    BitClear, BitRead, BitSet, BitWrite, _BV, Cbi, Sbi, PortModeRegister, PortInputRegister,
+    PortOutputRegister)
+
+  - modified 4 Dec 2024 by Andrzej karwowski (added default values of routines:
+    PortModeRegister, PortInputRegister, PortOutputRegister; thanks for @Dzandaa for
+    pointing it out!)
 }
 
 interface
@@ -228,7 +236,7 @@ begin
 end;}
 
 
-function BitIsSet(const aSfrp: PUInt8; const aBit: UInt8): boolean;  inline;
+function BitIsSet(const aSfrp: PUInt8; const aBit: UInt8): boolean; inline;
 begin
   Result:=(aSfrp^ and _BV(aBit))>0;
 end;
@@ -302,6 +310,7 @@ begin
   2: Result:=@DDRB;
   3: Result:=@DDRC;
   4: Result:=@DDRD;
+  else Result:=nil; //added 4 dec 2024 by A. K.
   end;
 end;
 
@@ -313,6 +322,7 @@ begin
   2: Result:=@PINB;
   3: Result:=@PINC;
   4: Result:=@PIND;
+  else Result:=nil; //added 4 dec 2024 by A. K.
   end;
 end;
 
@@ -325,6 +335,7 @@ begin
   2: Result:=@PORTB;
   3: Result:=@PORTC;
   4: Result:=@PORTD;
+  else Result:=nil; //added 4 dec 2024 by A. K.
   end;
 end;
 
