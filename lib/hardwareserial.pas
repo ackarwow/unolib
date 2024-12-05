@@ -21,6 +21,8 @@ unit hardwareserial;
   - THardwareSerial._begin renamed to THardwareSerial.Start, THardwareSerial._end renamed to THardwareSerial.Stop
   - added THardwareSerial.Read for Arduino compatibility
   (Many thanks to @Dzandaa, @ccrause, and @VisualLab for discussion)
+  v08 (05.12.2024) 
+  - added THardwareSerial.ReadByte by @Dzandaa
 }
 
 interface
@@ -51,6 +53,7 @@ type
     function AvailableForWrite: byte;
     function PeekChar: char;
     function ReadChar: char;
+    function ReadByte: byte;
     function Read: Int16;
     procedure Flush;
     procedure WriteChar(const aChar: char);
@@ -134,6 +137,18 @@ begin
     b := RXBuffer[RXBufferTail];
     RXBufferTail := (RXBufferTail + 1) mod SERIAL_RX_BUFFER_SIZE;
     Result := Chr(b);
+  end;
+end;
+
+function THardwareSerial.ReadByte: byte;
+begin
+  // if the head isn't ahead of the tail, we don't have any characters
+  if (RXBufferHead = RXBufferTail) then
+    Result := 0 //-1
+  else
+  begin
+    Result := RXBuffer[RXBufferTail];
+    RXBufferTail := (RXBufferTail + 1) mod SERIAL_RX_BUFFER_SIZE;
   end;
 end;
 
