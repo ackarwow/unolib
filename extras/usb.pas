@@ -3,6 +3,9 @@ unit usb;
 {
   Based on Arduino library source
   ported to Pascal by Andrzej Karwowski 2024
+
+  v08 (05.12.2024)
+  - added TODO: support for PluggableUSB
 }
 
 {$mode objfpc}
@@ -401,6 +404,7 @@ begin
   if (i = CDC_ACM_INTERFACE) then
     Exit(CDC_Setup(setup));
 
+  {TODO: support for PluggableUSB}
 //#ifdef PLUGGABLE_USB_ENABLED
 //	return PluggableUSB().setup(setup);
 //#endif
@@ -761,6 +765,7 @@ begin
   CDC_GetInterface(interfaces);
 //#endif
 
+  {TODO: support for PluggableUSB}
 //#ifdef PLUGGABLE_USB_ENABLED
 //	PluggableUSB().getInterface(&interfaces);
 //#endif
@@ -806,6 +811,8 @@ begin
     Exit(SendConfiguration(setup.wLength));
 
   InitControl(setup.wLength);
+
+  {TODO: support for PluggableUSB}
 //#ifdef PLUGGABLE_USB_ENABLED
 //	int ret = PluggableUSB().getDescriptor(setup);
 //	if (ret != 0) {
@@ -834,6 +841,7 @@ begin
       Exit(USB_SendStringDescriptor(STRING_MANUFACTURER, strlen({USB_MANUFACTURER}STRING_MANUFACTURER), 0))
     else if (setup.wValueL = ISERIAL) then
     begin
+  {TODO: support for PluggableUSB}
 //#ifdef PLUGGABLE_USB_ENABLED
 //			char name[ISERIAL_MAX_LEN];
 //			PluggableUSB().getShortName(name);
