@@ -13,6 +13,9 @@ interface
   https://github.com/PetteriAimonen/libfixmath
 
   ported to Pascal by Andrzej Karwowski 2021
+
+  v08 (05.12.2024)
+  - added Fix16Sqrt
 }
 
 
@@ -26,7 +29,7 @@ interface
 {Fix16.h}
 
 type
-  TFix16 = longint; //int32_t;
+  TFix16 = Int32{longint}; //int32_t;
 
 const
   FOUR_DIV_PI: TFix16 = $145F3;                //Fix16 value of 4/PI
@@ -35,8 +38,8 @@ const
   PI_DIV_4: TFix16 = $0000C90F;                //Fix16 value of PI/4
   THREE_PI_DIV_4: TFix16 = $00025B2F;          //Fix16 value of 3PI/4
 
-  fix16_maximum: TFix16 = $FFFFFFF;            //the maximum value of fix16_t
-  fix16_minimum: TFix16 = $80000000;           //the minimum value of fix16_t
+  fix16_maximum: TFix16  = $FFFFFFF;           //the maximum value of fix16_t
+  fix16_minimum: TFix16  = $80000000;          //the minimum value of fix16_t
   fix16_overflow: TFix16 = $80000000;          //the value used to indicate overflows when FIXMATH_NO_OVERFLOW is not specified
 
   fix16_pi: TFix16 = 205887;                   //fix16_t value of pi
@@ -46,18 +49,27 @@ const
 
   {versions for FIXMATH_OPTIMIZE_8BIT = optimized for AVR}
 
-  function IntToFix16(const a: longint): TFix16;
+  function IntToFix16(const a: Int32{longint}): TFix16;
+
+  function Fix16Abs(const x: TFix16): TFix16;
+  function Fix16Floor(const x: TFix16): TFix16;
+  function Fix16Ceil(const x: TFix16): TFix16;
+  function Fix16Min(const x, y: TFix16): TFix16;
+  function Fix16Max(const x, y: TFix16): TFix16;
+
   function Fix16Add(const inArg0, inArg1: TFix16): TFix16;
   function Fix16Sub(const inArg0, inArg1: TFix16): TFix16;
   function Fix16Mul(const inArg0, inArg1: TFix16): TFix16;
   function Fix16Div(const inArg0, inArg1: TFix16): TFix16;
   function Fix16Mod(x, y: TFix16): TFix16;
+  function Fix16Sqrt(const v: TFix16):TFix16;
+
   procedure Fix16ToStr(const Value: TFix16; const decimals: byte; var OutStr: shortstring);
   function StrToFix16(const buf: shortstring): TFix16;
 
 implementation
 
-function IntToFix16(const a: longint): TFix16;
+function IntToFix16(const a: Int32{longint}): TFix16;
 begin
   Result:=a * fix16_one;
 end;
@@ -363,6 +375,71 @@ begin
   Result:=x;
 end;
 
+//after: https://github.com/chmike/fpsqrt/blob/master/fpsqrt.c
+
+// sqrt_fx16_16_to_fx16_16 computes the squrare root of a fixed point with 16 bit
+// fractional part and returns a fixed point with 16 bit fractional part. It
+// requires that v is positive. The computation use only 32 bit registers and
+// simple operations.
+function Fix16Sqrt(const v: TFix16):TFix16;
+var
+  t, q, b, r: UInt32;
+begin
+  r:=Int32(v);
+  q:= 0;
+  b:= $40000000;
+
+  if (r < $40000200) then
+  begin
+    while (b<>$40) do
+    begin
+      t:= q + b;
+      if ( r >= t ) then
+      begin
+        r:=r - t;
+        q:= t + b; // equivalent to q += 2*b
+      end;
+      r:= r shl 1;
+      b:= b shr 1;
+    end;
+    q:= q shr 8;
+    Exit(q);
+  end;
+
+  while ( b > $40 ) do
+  begin
+    t:= q + b;
+    if ( r >= t ) then
+    begin
+      r:=r - t;
+      q:= t + b; // equivalent to q += 2*b
+    end;
+    if( (r and $80000000) <> 0 ) then
+    begin
+      q:=q shr 1;
+      b:=b shr 1;
+      r:=r shr 1;
+      while ( b > $20 ) do
+      begin
+        t:= q + b;
+        if ( r >= t ) then
+        begin
+          r:= r-t;
+          q:= t + b;
+        end;
+        r:=r shl 1;
+        b:=b shr 1;
+      end;
+      q :=q shr  7;
+      Exit(q);
+    end;
+    r:=r shl 1;
+    b:=b shr 1;
+  end;
+  q:=q shr 8;
+  Result:=q;
+end;
+
 const
   scales:array[0..7] of UInt32 =
       // 5 decimals is enough for full fix16_t precision
@@ -387,6 +464,7 @@ begin
   end;
 end;
 
+//test 05.12.2024: max decimals - 5, if decimals=8 then no values after separator
 procedure Fix16ToStr(const Value: TFix16; const decimals: byte; var OutStr: shortstring);
 var
   uvalue, intpart, fracpart, scale: UInt32;
