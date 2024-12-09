@@ -51,6 +51,17 @@ have already been compiled.
 
 ## Changes
 
+### version 0.8 - 09/12/2024 (AVRPascal 3.0)
+
+ - added extra code for Arduino Leonardo ("extras" directory)
+ - modified $IFDEF conditionals for compatibility with FPC 3.3.1 defines
+ - inlined routines in defs.pas and timer.pas
+ - added default result of functions in defs.pas
+ - added THardwareSerial.ReadByte in hardwareserial.pas
+ - added Fix16Sqrt routine in fix16.pas
+
+Thanks to @Dzandaa for suggestions and implementation of THardwareSerial.ReadByte
+
 ### version 0.7 - 18/11/2024 (AVRPascal 2.9)
 changes in hardwareserial.pas:
 
@@ -65,7 +76,9 @@ Many thanks to @Dzandaa, @ccrause, and @VisualLab for suggestions and discussion
 
  - changed conditional directive, added arduinonano
  - fixed problem with millisecond counter in lib\timer.pas
- - added examples\TestBlinkWithoutDelay.pas, thanks to Henk Heemstra for source code
+ - added examples\TestBlinkWithoutDelay.pas
+
+Thanks to Henk Heemstra for source code of TestBlinkWithoutDelay.pas
 
 ### version 0.5 - 18/07/2024 (AVRPascal 2.0)
 
