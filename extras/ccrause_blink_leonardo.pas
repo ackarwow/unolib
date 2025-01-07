@@ -7,7 +7,7 @@ program ccrause_blink_leonardo;
 uses
   ccrause_delay
   {$if defined(FPC_MCU_ARDUINOLEONARDO)}
-  ,cdc, usb
+  ,cdc, usb, intrinsics
   {$endif}
   ;
 
@@ -46,23 +46,11 @@ begin
   LEDport := LEDport and not(LEDpin);
 end;
 
-//disable interrputs
-procedure Cli; assembler; inline;
-asm
-  CLI
-end;
-
-//enable interrupts
-procedure Sei; assembler; inline;
-asm
-  SEI
-end;
-
 begin
   {$if defined(FPC_MCU_ARDUINOLEONARDO)}
   USBDevice.Attach;
 
-  Sei;
+  avr_sei;
   {$endif}
 
   LEDdir := LEDpin;

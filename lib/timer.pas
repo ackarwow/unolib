@@ -15,12 +15,14 @@ unit timer;
   - modified 13 Oct 2024 by Andrzej Karwowski
 
   - modified 3 Dec 2024 by Andrzej Karwowski (inlined routines: ClockCyclesToMicroseconds, MicrosecondsToClockCycles)
+
+  - modified 07 Jan 2025 by Andrzej Karwowski (cli and sei replaced by avr_cli and avr_sei from intrinsics)
 }
 
 interface
 
 uses
-  defs;
+  defs, intrinsics;
 
 const
   clockCyclesPerMicrosecond: UInt32 = F_CPU div 1000000; {=16}
@@ -104,7 +106,7 @@ begin
 
   // disable interrupts while we read timer0_millis or we might get an
   // inconsistent value (e.g. in the middle of a write to timer0_millis)
-  Cli;
+  avr_cli;
   m:= timer0_millis;
   SREG:= oldSREG;
 
@@ -118,7 +120,7 @@ var
 begin
   oldSREG:= SREG;
 
-  Cli;
+  avr_cli;
   m:= timer0_overflow_count;
   t:= TCNT0;
 
@@ -328,7 +330,7 @@ procedure InitATMega328P;
 begin
   // this needs to be called before setup() or some functions won't
   // work there
-  Sei;
+  avr_sei;
 
   // on the ATmega168, timer 0 is also used for fast hardware pwm
   // (using phase-correct PWM would mean that timer 0 overflowed half as often

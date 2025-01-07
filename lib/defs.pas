@@ -14,9 +14,11 @@ unit defs;
     BitClear, BitRead, BitSet, BitWrite, _BV, Cbi, Sbi, PortModeRegister, PortInputRegister,
     PortOutputRegister)
 
-  - modified 4 Dec 2024 by Andrzej karwowski (added default values of routines:
+  - modified 4 Dec 2024 by Andrzej Karwowski (added default values of routines:
     PortModeRegister, PortInputRegister, PortOutputRegister; thanks for @Dzandaa for
     pointing it out!)
+
+  - modified 07 Jan 2025 by Andrzej Karwowski (cli and sei replaced by avr_cli and avr_sei from intrinsics)
 }
 
 interface
@@ -165,8 +167,6 @@ function _BV(const aBit: UInt8): UInt8; inline;
 
 procedure Cbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
 procedure Sbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
-procedure Cli; assembler;
-procedure Sei; assembler;
 
 function PortModeRegister(const aPort: UInt8): PUInt8; inline;
 function PortInputRegister(const aPort: UInt8): PUint8; inline;
@@ -287,18 +287,6 @@ end;
 procedure Sbi(const aSfrp: PUInt8; const aBit: UInt8); inline;
 begin
   aSfrp^:=aSfrp^ or _BV(aBit);
-end;
-
-//disable interrputs
-procedure Cli; assembler;
-asm
-  CLI
-end;
-
-//enable interrupts
-procedure Sei; assembler;
-asm
-  SEI
 end;
 
 //pins_arduino.h

@@ -134,7 +134,7 @@ var
 implementation
 
 uses
-  ccrause_delay, cdc;
+  ccrause_delay, cdc, intrinsics;
 
 const
   EP_SINGLE_64 = $32; // EP0
@@ -188,18 +188,6 @@ var
   _usbCurrentStatus: UInt8 = 0; // meaning of bits see usb_20.pdf, Figure 9-4.
   _usbSuspendState: UInt8 = 0; // copy of UDINT to check SUSPI and WAKEUPI bits
 
-//disable interrputs
-procedure Cli; assembler; inline;
-asm
-  CLI
-end;
-
-//enable interrupts
-procedure Sei; assembler; inline;
-asm
-  SEI
-end;
-
 procedure InitEP(index, _type, size: UInt8); inline;
 begin
   UENUM:= index;
@@ -216,7 +204,7 @@ end;
 procedure TLockEP.LockEP(ep: UInt8);
 begin
   _sreg:=SREG;
-  cli;
+  avr_cli;
   SetEP(ep and 7);
 end;
 

@@ -9,6 +9,8 @@ unit digital;
 {
   Based on Arduino library source
   ported to Pascal by Andrzej Karwowski 2021
+
+  - modified 07 Jan 2025 by Andrzej Karwowski (cli and sei replaced by avr_cli and avr_sei from intrinsics)
 }
 
 interface
@@ -35,7 +37,7 @@ procedure DigitalDebugBreak;
 implementation
 
 uses
-  defs;
+  defs, intrinsics;
 
 //standard/pins_arduino.h
 function DigitalPinToBitmask(const aPin: UInt8): UInt8;
@@ -141,7 +143,7 @@ begin
   if (aMode = INPUT) then
   begin
     oldSREG:= SREG;
-    Cli;
+    avr_cli;
     regp^:=regp^ and not bit;
     outp^:=outp^ and not bit;
     SREG:= oldSREG;
@@ -149,7 +151,7 @@ begin
   else if (aMode = INPUT_PULLUP) then
   begin
     oldSREG:= SREG;
-    Cli;
+    avr_cli;
     regp^:=regp^ and not bit;
     outp^:=outp^ or bit;
     SREG:= oldSREG;
@@ -157,7 +159,7 @@ begin
   else
   begin
     oldSREG:= SREG;
-    Cli;
+    avr_cli;
     regp^:=regp^ or bit;
     SREG:= oldSREG;
   end
@@ -196,7 +198,7 @@ begin
 
   outp:= PortOutputRegister(port);
   oldSREG:= SREG;
-  Cli;
+  avr_cli;
 
   if (aVal = LOW) then
     outp^:=outp^ and not bit

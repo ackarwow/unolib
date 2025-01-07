@@ -342,19 +342,7 @@ var
 implementation
 
 uses
-  ccrause_delay;
-
-//disable interrputs
-procedure Cli; assembler; inline;
-asm
-  CLI
-end;
-
-//enable interrupts
-procedure Sei; assembler; inline;
-asm
-  SEI
-end;
+  ccrause_delay, intrinsics;
 
 function isLUFAbootloader: boolean;
 begin
@@ -584,10 +572,10 @@ begin
   //	ret = breakValue;
   //	breakValue = -1;
   //}
-  Cli;
+  avr_cli;
   Result:= breakValue;
   breakValue:= -1;
-  Sei;
+  avr_sei;
 end;
 
 function TCDCSerial.Baud: UInt32;
@@ -598,9 +586,9 @@ begin
   //	baudrate =  _usbLineInfo.dwDTERate;
   //}
   //return baudrate;
-  Cli;
+  avr_cli;
   Result:=_usbLineInfo.dwDTERate;
-  Sei;
+  avr_sei;
 end;
 
 function TCDCSerial.StopBits: UInt8;
