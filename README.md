@@ -46,6 +46,10 @@ Some extra code is placed in "extras" directory:
  - usb.pas - USB support for Arduino Leonardo
  - wdt.pas - watchdog timer routines
 
+Lazarus test projects are placed in "tests" directory:
+
+- serial - serial port communication test (courtesy of @Dzandaa)
+
 Before compiling a given program, make sure that the library modules listed in the uses section
 have already been compiled.
 

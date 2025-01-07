@@ -1,0 +1,273 @@
+object TestAVRForm: TTestAVRForm
+  Left = 1908
+  Height = 549
+  Top = 437
+  Width = 636
+  Caption = 'Test AVR'
+  ClientHeight = 549
+  ClientWidth = 636
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Position = poWorkAreaCenter
+  LCLVersion = '2.2.6.0'
+  object BTest1: TButton
+    Left = 13
+    Height = 25
+    Top = 509
+    Width = 75
+    Anchors = [akLeft, akBottom]
+    Caption = 'Test 1'
+    OnClick = BTest1Click
+    TabOrder = 0
+  end
+  object MainSplitter: TPairSplitter
+    Cursor = crDefault
+    Left = 13
+    Height = 460
+    Top = 8
+    Width = 619
+    Color = clMoneyGreen
+    Position = 250
+    SplitterType = pstVertical
+    object SplitterRS232: TPairSplitterSide
+      Cursor = crArrow
+      Left = 0
+      Height = 250
+      Top = 0
+      Width = 619
+      ClientWidth = 619
+      ClientHeight = 250
+      object GRS232: TGroupBox
+        Left = 0
+        Height = 238
+        Top = 8
+        Width = 417
+        Caption = 'RS232'
+        ClientHeight = 221
+        ClientWidth = 415
+        Color = clMoneyGreen
+        ParentBackground = False
+        ParentColor = False
+        TabOrder = 0
+        object CBRS232Port: TComboBox
+          Left = 64
+          Height = 23
+          Top = 0
+          Width = 129
+          ItemHeight = 15
+          OnChange = CBRS232PortChange
+          TabOrder = 0
+        end
+        object LRS232Port: TLabel
+          Left = 8
+          Height = 15
+          Top = 8
+          Width = 22
+          Caption = 'Port'
+          ParentColor = False
+        end
+        object CBBaudRate: TComboBox
+          Left = 280
+          Height = 23
+          Top = 0
+          Width = 115
+          ItemHeight = 15
+          Items.Strings = (
+            '110'
+            '300'
+            '600'
+            '1200'
+            '2400'
+            '4800'
+            '9600'
+            '14400'
+            '19200'
+            '38400'
+            '56000'
+            '57600'
+            '115200'
+            '128000'
+            '230400'
+            '256000'
+            '460800'
+            '921600'
+          )
+          OnChange = CBBaudRateChange
+          TabOrder = 1
+        end
+        object LBaudrate: TLabel
+          Left = 216
+          Height = 15
+          Top = 8
+          Width = 50
+          Caption = 'BaudRate'
+          ParentColor = False
+        end
+        object CBDataBits: TComboBox
+          Left = 64
+          Height = 23
+          Top = 32
+          Width = 129
+          ItemHeight = 15
+          Items.Strings = (
+            '8'
+            '7'
+            '6'
+            '5'
+          )
+          OnChange = CBDataBitsChange
+          TabOrder = 2
+        end
+        object LDataBits: TLabel
+          Left = 8
+          Height = 15
+          Top = 36
+          Width = 43
+          Caption = 'DataBits'
+          ParentColor = False
+        end
+        object CBStopBits: TComboBox
+          Left = 280
+          Height = 23
+          Top = 32
+          Width = 114
+          ItemHeight = 15
+          Items.Strings = (
+            'One'
+            'One And Half'
+            'Two'
+          )
+          OnChange = CBStopBitsChange
+          TabOrder = 3
+        end
+        object LStopBits: TLabel
+          Left = 216
+          Height = 15
+          Top = 38
+          Width = 43
+          Caption = 'StopBits'
+          ParentColor = False
+        end
+        object CBParity: TComboBox
+          Left = 64
+          Height = 23
+          Top = 64
+          Width = 129
+          ItemHeight = 15
+          Items.Strings = (
+            'None'
+            'Odd'
+            'Even'
+            'Mark'
+            'Space'
+          )
+          OnChange = CBParityChange
+          TabOrder = 4
+        end
+        object LParity: TLabel
+          Left = 8
+          Height = 15
+          Top = 66
+          Width = 30
+          Caption = 'Parity'
+          ParentColor = False
+        end
+        object CBFlow: TComboBox
+          Left = 280
+          Height = 23
+          Top = 64
+          Width = 112
+          ItemHeight = 15
+          Items.Strings = (
+            'None'
+            'XOnXOff'
+            'Hardware'
+          )
+          OnChange = CBFlowChange
+          TabOrder = 5
+        end
+        object LFlow: TLabel
+          Left = 216
+          Height = 15
+          Top = 66
+          Width = 25
+          Caption = 'Flow'
+          ParentColor = False
+        end
+        object BRS232Start: TButton
+          Left = 8
+          Height = 25
+          Top = 144
+          Width = 80
+          Caption = 'Start RS232'
+          OnClick = BRS232StartClick
+          TabOrder = 6
+        end
+        object RBRS232: TRadioButton
+          Left = 112
+          Height = 19
+          Top = 144
+          Width = 20
+          Checked = True
+          Color = clSkyBlue
+          ParentColor = False
+          TabOrder = 7
+          TabStop = True
+        end
+      end
+    end
+    object SplitterLog: TPairSplitterSide
+      Cursor = crArrow
+      Left = 0
+      Height = 205
+      Top = 255
+      Width = 619
+      ClientWidth = 619
+      ClientHeight = 205
+      object Mlog: TMemo
+        Left = 8
+        Height = 194
+        Top = 0
+        Width = 598
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        TabOrder = 0
+      end
+    end
+  end
+  object BTest2: TButton
+    Left = 104
+    Height = 25
+    Top = 509
+    Width = 75
+    Anchors = [akLeft, akBottom]
+    Caption = 'Test 2'
+    OnClick = BTest2Click
+    TabOrder = 2
+  end
+  object RS232: TLazSerial
+    Active = False
+    BaudRate = br___110
+    DataBits = db8bits
+    Parity = pNone
+    FlowControl = fcNone
+    StopBits = sbOne
+    SynSer.Tag = 0
+    SynSer.Handle = -1
+    SynSer.RaiseExcept = False
+    SynSer.TestDSR = False
+    SynSer.TestCTS = False
+    SynSer.MaxLineLength = 0
+    SynSer.DeadlockTimeout = 1000
+    SynSer.LinuxLock = False
+    SynSer.ConvertLineEnd = False
+    SynSer.AtTimeout = 1000
+    SynSer.InterPacketTimeout = True
+    SynSer.NonBlock = False
+    Device = 'COM1'
+    RcvLineCRLF = False
+    OnRxData = RS232RxData
+    Left = 251
+    Top = 501
+  end
+end
