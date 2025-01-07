@@ -23,6 +23,8 @@ unit hardwareserial;
   (Many thanks to @Dzandaa, @ccrause, and @VisualLab for discussion)
   v08 (05.12.2024) 
   - added THardwareSerial.ReadByte by @Dzandaa
+  v09
+  - fixed buffer size (64 bytes)
 }
 
 interface
@@ -31,8 +33,8 @@ uses
   defs;
 
 const
-  SERIAL_RX_BUFFER_SIZE = 16; // read buffer size
-  SERIAL_TX_BUFFER_SIZE = 16; // write buffer size
+  SERIAL_RX_BUFFER_SIZE = {16}64; // read buffer size
+  SERIAL_TX_BUFFER_SIZE = {16}64; // write buffer size
 
 type
   THardwareSerial = object
@@ -250,7 +252,7 @@ end;
 
 function THardwareSerial.Available: byte;
 begin
-  Result := WORD(SERIAL_RX_BUFFER_SIZE + RXBufferHead - RXBufferTail) mod SERIAL_RX_BUFFER_SIZE;
+  Result := UInt16(SERIAL_RX_BUFFER_SIZE + RXBufferHead - RXBufferTail) mod SERIAL_RX_BUFFER_SIZE;
 end;
 
 function THardwareSerial.AvailableForWrite: byte;
