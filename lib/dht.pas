@@ -84,7 +84,7 @@ var
 implementation
 
 uses
-  timer, digital;
+  timer, digital, intrinsics;
 
 procedure TDHT.Init(pin, model: UInt8);
 begin
@@ -224,9 +224,9 @@ var
   sum: UInt8;
 begin
     //  VALUES
-    if (DisableIRQ) then Cli;
+    if (DisableIRQ) then avr_cli;
     rv:=ReadSensor(DHT_DHT11_WAKEUP, DHT_DHT11_LEADING_ZEROS);
-    if (DisableIRQ) then Sei;
+    if (DisableIRQ) then avr_sei;
 
     // these bits are always zero, masking them reduces errors.
     _bits[0]:=_bits[0] and $7F;
@@ -250,9 +250,9 @@ var
   sum: UInt8;
 begin
     // READ VALUES
-    if (DisableIRQ) then Cli;
+    if (DisableIRQ) then avr_cli;
     rv:=ReadSensor(DHT_DHT11_WAKEUP, DHT_DHT11_LEADING_ZEROS);
-    if (DisableIRQ) then Sei;
+    if (DisableIRQ) then avr_sei;
 
     // CONVERT AND STORE
     Humidity:=Fix16Mul(IntToFix16(_bits[0] +_bits[1]), StrToFix16('0.1'));
@@ -275,9 +275,9 @@ var
   t: Int16;
 begin
     // READ VALUES
-    if (DisableIRQ) then Cli;
+    if (DisableIRQ) then avr_cli;
     rv:= ReadSensor(DHT_DHT_WAKEUP, DHT_DHT_LEADING_ZEROS);
-    if (DisableIRQ) then Sei;
+    if (DisableIRQ) then avr_sei;
 
     // these bits are always zero, masking them reduces errors.
     _bits[0]:=_bits[0] and $03;
