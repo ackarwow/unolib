@@ -13,7 +13,7 @@ Library modules included:
  - digital.pas - support for digital pins
  - ds1302rtc.pas - support for ds1302 real time clock
  - fix16.pas - support for fixed point numbers
- - float32.pas - support for floating point numbers, basic arithmetic and trigonometric operations (to be tested)
+ - float32.pas - support for floating point numbers, basic arithmetic and trigonometric operations (part of code by @Dzandaa)
  - hardwareserial.pas - support for serial communication
  - liquidcrystal.pas - support for LCD
  - timer.pas - time-related routines
