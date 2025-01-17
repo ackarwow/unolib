@@ -3,6 +3,8 @@
 **UnoLib** is a Pascal library designed for the Arduino Uno platform and [AVRPascal](http://akarwowski.pl/index.php?page=electronics&lang=en) or other editor using FPC 3.3.1 for AVR microcontrollers (e.g. FreePascal IDE, Lazarus).
 It is a translation of a subset of the standard Arduino libraries, adapted as needed for a Pascal environment. Moreover, support for fixed point numbers has been added.
 
+Written 2022-2025 by @ackarwow in collaboration with @Dzandaa (from 2024)
+
 ![AVRPascal](UnoLib_AVRPascal.png)
 
 Library modules included:
@@ -13,7 +15,7 @@ Library modules included:
  - digital.pas - support for digital pins
  - ds1302rtc.pas - support for ds1302 real time clock
  - fix16.pas - support for fixed point numbers
- - float32.pas - support for floating point numbers, basic arithmetic and trigonometric operations (part of code by @Dzandaa)
+ - float32.pas - support for floating point numbers, basic arithmetic and trigonometric operations (in collaboration with @Dzandaa)
  - hardwareserial.pas - support for serial communication
  - liquidcrystal.pas - support for LCD
  - timer.pas - time-related routines
@@ -49,7 +51,9 @@ Some extra code is placed in "extras" directory:
 
 Lazarus test projects are placed in "tests" directory:
 
-- serial - serial port communication test (courtesy of @Dzandaa)
+- conversion - routines for numeric and string conversion and data preparation for CORDIC algorithm (by @Dzandaa with collaboration of @ackarwow)
+- float32 - test programs for testing TFloat32 type both on Lazarus and on Arduino side (based on serial port communication program by @Dzandaa)  
+- serial - serial port communication test (by @Dzandaa)
 
 Before compiling a given program, make sure that the library modules listed in the uses section
 have already been compiled.

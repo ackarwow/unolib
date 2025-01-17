@@ -1,0 +1,149 @@
+object Conv2HexaForm: TConv2HexaForm
+  Left = 2003
+  Height = 493
+  Top = 236
+  Width = 651
+  Caption = 'Convert To Hexa'
+  ClientHeight = 493
+  ClientWidth = 651
+  Position = poWorkAreaCenter
+  object MLog: TMemo
+    Left = 8
+    Height = 376
+    Top = 8
+    Width = 635
+    Align = alClient
+    BorderSpacing.Around = 8
+    ScrollBars = ssBoth
+    TabOrder = 0
+    WordWrap = False
+  end
+  object pnlTools: TPanel
+    Left = 8
+    Height = 93
+    Top = 392
+    Width = 635
+    Align = alBottom
+    BorderSpacing.Around = 8
+    BevelOuter = bvNone
+    ClientHeight = 93
+    ClientWidth = 635
+    TabOrder = 1
+    object gbConversion: TGroupBox
+      Left = 0
+      Height = 93
+      Top = 0
+      Width = 416
+      Align = alLeft
+      Caption = 'Conversion'
+      ClientHeight = 73
+      ClientWidth = 412
+      TabOrder = 0
+      object BDec2Hex: TButton
+        Left = 8
+        Height = 25
+        Top = 6
+        Width = 78
+        Caption = 'Dec 2 Hex'
+        OnClick = BDec2HexClick
+        TabOrder = 0
+      end
+      object FSEValue: TFloatSpinEdit
+        Left = 96
+        Height = 23
+        Top = 6
+        Width = 99
+        AutoSize = False
+        DecimalPlaces = 10
+        TabOrder = 1
+      end
+      object BHex2Dec: TButton
+        Left = 8
+        Height = 25
+        Top = 38
+        Width = 78
+        Caption = 'Hex 2 Dec'
+        OnClick = BHex2DecClick
+        TabOrder = 2
+      end
+      object TBHexa: TEdit
+        Left = 96
+        Height = 23
+        Top = 38
+        Width = 99
+        AutoSize = False
+        MaxLength = 8
+        OnKeyPress = TBHexaKeyPress
+        TabOrder = 3
+      end
+      object BUInt322Str: TButton
+        Left = 208
+        Height = 25
+        Top = 5
+        Width = 86
+        Caption = 'UInt32 2 Str'
+        OnClick = BUInt322StrClick
+        TabOrder = 4
+      end
+      object SPUInt32: TSpinEdit
+        Left = 303
+        Height = 23
+        Top = 6
+        Width = 99
+        AutoSize = False
+        MaxValue = 2147483647
+        OnKeyPress = SPUInt32KeyPress
+        TabOrder = 5
+      end
+      object BDec2Fix: TButton
+        Left = 208
+        Height = 25
+        Top = 38
+        Width = 86
+        Caption = 'Dec 2 Fix16'
+        OnClick = BDec2FixClick
+        TabOrder = 6
+      end
+      object FFEValue: TFloatSpinEdit
+        Left = 303
+        Height = 23
+        Top = 38
+        Width = 99
+        AutoSize = False
+        DecimalPlaces = 10
+        TabOrder = 7
+      end
+    end
+    object gbCodeGeneration: TGroupBox
+      Left = 424
+      Height = 93
+      Top = 0
+      Width = 208
+      Align = alLeft
+      BorderSpacing.Left = 8
+      Caption = 'Code generation'
+      ClientHeight = 73
+      ClientWidth = 204
+      TabOrder = 1
+      object BCordic: TButton
+        Left = 16
+        Height = 25
+        Top = 6
+        Width = 75
+        Caption = 'Cordic'
+        OnClick = BCordicClick
+        TabOrder = 0
+      end
+      object SPIterations: TSpinEdit
+        Left = 104
+        Height = 23
+        Top = 8
+        Width = 87
+        MaxValue = 64
+        MinValue = 16
+        TabOrder = 1
+        Value = 32
+      end
+    end
+  end
+end

@@ -1,0 +1,90 @@
+object Form1: TForm1
+  Left = 361
+  Height = 509
+  Top = 31
+  Width = 1008
+  Caption = 'Form1'
+  ClientHeight = 509
+  ClientWidth = 1008
+  LCLVersion = '2.2.6.0'
+  object memOutput: TMemo
+    Left = 16
+    Height = 472
+    Top = 16
+    Width = 864
+    Font.CharSet = EASTEUROPE_CHARSET
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    Lines.Strings = (
+      'memOutput'
+    )
+    ParentFont = False
+    ScrollBars = ssBoth
+    TabOrder = 0
+  end
+  object cmdTests: TButton
+    Left = 896
+    Height = 25
+    Top = 16
+    Width = 99
+    Caption = 'Test TFloat32'
+    OnClick = cmdTestsClick
+    TabOrder = 1
+  end
+  object cmdTestSinus: TButton
+    Left = 896
+    Height = 25
+    Top = 56
+    Width = 99
+    Caption = 'Test sinus'
+    OnClick = cmdTestSinusClick
+    TabOrder = 2
+  end
+  object cmdTestLog2: TButton
+    Left = 896
+    Height = 25
+    Top = 96
+    Width = 99
+    Caption = 'Test log2'
+    OnClick = cmdTestLog2Click
+    TabOrder = 3
+  end
+  object cmdTestPow: TButton
+    Left = 896
+    Height = 25
+    Top = 136
+    Width = 99
+    Caption = 'Test pow'
+    OnClick = cmdTestPowClick
+    TabOrder = 4
+  end
+  object cmdTestExp: TButton
+    Left = 896
+    Height = 25
+    Top = 232
+    Width = 99
+    Caption = 'Test exp'
+    OnClick = cmdTestExpClick
+    TabOrder = 5
+  end
+  object cmdTestIntPow: TButton
+    Left = 896
+    Height = 25
+    Top = 168
+    Width = 99
+    Caption = 'Test intpow'
+    OnClick = cmdTestIntPowClick
+    TabOrder = 6
+  end
+  object cmdTest2Str: TButton
+    Left = 896
+    Height = 25
+    Top = 272
+    Width = 99
+    Caption = 'Test tostr'
+    OnClick = cmdTest2StrClick
+    TabOrder = 7
+  end
+end
