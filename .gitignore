@@ -21,7 +21,7 @@
 # Lazarus backups
 backup/
 *.bak
-lib/
+#lib/
 
 # Application bundle for Mac OS
 *.app/
@@ -39,4 +39,3 @@ lib/
 *.ppu
 
 !info.txt
-!*.pas
