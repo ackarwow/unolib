@@ -1,7 +1,7 @@
 object TestAVRForm: TTestAVRForm
-  Left = 1908
+  Left = 1848
   Height = 549
-  Top = 437
+  Top = 173
   Width = 636
   Caption = 'Test AVR'
   ClientHeight = 549
@@ -10,7 +10,7 @@ object TestAVRForm: TTestAVRForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poWorkAreaCenter
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.4.0.0'
   object BTest1: TButton
     Left = 13
     Height = 25
@@ -18,16 +18,18 @@ object TestAVRForm: TTestAVRForm
     Width = 75
     Anchors = [akLeft, akBottom]
     Caption = 'Test 1'
-    OnClick = BTest1Click
     TabOrder = 0
+    OnClick = BTest1Click
   end
   object MainSplitter: TPairSplitter
-    Cursor = crDefault
+    Cursor = crVSplit
     Left = 13
     Height = 460
     Top = 8
     Width = 619
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Color = clMoneyGreen
+    OnResize = MainSplitterResize
     Position = 250
     SplitterType = pstVertical
     object SplitterRS232: TPairSplitterSide
@@ -44,8 +46,8 @@ object TestAVRForm: TTestAVRForm
         Top = 8
         Width = 417
         Caption = 'RS232'
-        ClientHeight = 221
-        ClientWidth = 415
+        ClientHeight = 218
+        ClientWidth = 413
         Color = clMoneyGreen
         ParentBackground = False
         ParentColor = False
@@ -56,8 +58,8 @@ object TestAVRForm: TTestAVRForm
           Top = 0
           Width = 129
           ItemHeight = 15
-          OnChange = CBRS232PortChange
           TabOrder = 0
+          OnChange = CBRS232PortChange
         end
         object LRS232Port: TLabel
           Left = 8
@@ -93,8 +95,8 @@ object TestAVRForm: TTestAVRForm
             '460800'
             '921600'
           )
-          OnChange = CBBaudRateChange
           TabOrder = 1
+          OnChange = CBBaudRateChange
         end
         object LBaudrate: TLabel
           Left = 216
@@ -116,8 +118,8 @@ object TestAVRForm: TTestAVRForm
             '6'
             '5'
           )
-          OnChange = CBDataBitsChange
           TabOrder = 2
+          OnChange = CBDataBitsChange
         end
         object LDataBits: TLabel
           Left = 8
@@ -138,8 +140,8 @@ object TestAVRForm: TTestAVRForm
             'One And Half'
             'Two'
           )
-          OnChange = CBStopBitsChange
           TabOrder = 3
+          OnChange = CBStopBitsChange
         end
         object LStopBits: TLabel
           Left = 216
@@ -162,8 +164,8 @@ object TestAVRForm: TTestAVRForm
             'Mark'
             'Space'
           )
-          OnChange = CBParityChange
           TabOrder = 4
+          OnChange = CBParityChange
         end
         object LParity: TLabel
           Left = 8
@@ -184,8 +186,8 @@ object TestAVRForm: TTestAVRForm
             'XOnXOff'
             'Hardware'
           )
-          OnChange = CBFlowChange
           TabOrder = 5
+          OnChange = CBFlowChange
         end
         object LFlow: TLabel
           Left = 216
@@ -201,14 +203,14 @@ object TestAVRForm: TTestAVRForm
           Top = 144
           Width = 80
           Caption = 'Start RS232'
-          OnClick = BRS232StartClick
           TabOrder = 6
+          OnClick = BRS232StartClick
         end
         object RBRS232: TRadioButton
           Left = 112
-          Height = 19
+          Height = 17
           Top = 144
-          Width = 20
+          Width = 18
           Checked = True
           Color = clSkyBlue
           ParentColor = False
@@ -226,10 +228,10 @@ object TestAVRForm: TTestAVRForm
       ClientWidth = 619
       ClientHeight = 205
       object Mlog: TMemo
-        Left = 8
-        Height = 194
+        Left = 0
+        Height = 208
         Top = 0
-        Width = 598
+        Width = 624
         Anchors = [akTop, akLeft, akRight, akBottom]
         TabOrder = 0
       end
@@ -242,8 +244,18 @@ object TestAVRForm: TTestAVRForm
     Width = 75
     Anchors = [akLeft, akBottom]
     Caption = 'Test 2'
-    OnClick = BTest2Click
     TabOrder = 2
+    OnClick = BTest2Click
+  end
+  object BExit: TButton
+    Left = 557
+    Height = 25
+    Top = 509
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'Exit'
+    TabOrder = 3
+    OnClick = BExitClick
   end
   object RS232: TLazSerial
     Active = False
@@ -258,16 +270,15 @@ object TestAVRForm: TTestAVRForm
     SynSer.TestDSR = False
     SynSer.TestCTS = False
     SynSer.MaxLineLength = 0
-    SynSer.DeadlockTimeout = 1000
+    SynSer.DeadlockTimeout = 30000
     SynSer.LinuxLock = False
     SynSer.ConvertLineEnd = False
     SynSer.AtTimeout = 1000
     SynSer.InterPacketTimeout = True
-    SynSer.NonBlock = False
     Device = 'COM1'
     RcvLineCRLF = False
     OnRxData = RS232RxData
-    Left = 251
-    Top = 501
+    Left = 492
+    Top = 107
   end
 end

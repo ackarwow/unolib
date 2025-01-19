@@ -1,7 +1,5 @@
 unit TestAVRU;
 
-{source code courtesy of @Dzandaa}
-
 {$mode objfpc}{$H+}
 
 interface
@@ -13,7 +11,10 @@ uses
 	{$ENDIF}
 {$ENDIF}
 	Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, PairSplitter, FileUtil,
-        Registry, LazSerial;
+	{$IFDEF WINDOWS}
+	registry,
+	{$ENDIF}
+LazSerial;
 
 const
 	H_Send = 'S'; // Send
@@ -53,6 +54,7 @@ type
 		BRS232Start: TButton;
 		BTest1: TButton;
 		BTest2: TButton;
+		BExit: TButton;
 		CBBaudRate: TComboBox;
 		CBDataBits: TComboBox;
 		CBFlow: TComboBox;
@@ -60,7 +62,7 @@ type
 		CBRS232Port: TComboBox;
 		CBStopBits: TComboBox;
 		GRS232: TGroupBox;
-		RS232: TLazSerial;
+//		RS232: TLazSerial;
 		LBaudrate: TLabel;
 		LDataBits: TLabel;
 		LFlow: TLabel;
@@ -69,10 +71,12 @@ type
 		LStopBits: TLabel;
 		MainSplitter: TPairSplitter;
 		MLog: TMemo;
+		RS232: TLazSerial;
 		SplitterRS232: TPairSplitterSide;
 		SplitterLog: TPairSplitterSide;
 		RBRS232: TRadioButton;
-		procedure BRS232StartClick(Sender: TObject);
+		procedure BExitClick(Sender: TObject);
+  procedure BRS232StartClick(Sender: TObject);
 		procedure BTest1Click(Sender: TObject);
 		procedure BTest2Click(Sender: TObject);
   procedure CBBaudRateChange(Sender: TObject);
@@ -84,6 +88,7 @@ type
 		procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
 		procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
+		procedure MainSplitterResize(Sender: TObject);
 		procedure RS232RxData(Sender: TObject);
 
 		function SendData(Timeout: QWord):Boolean;
@@ -107,6 +112,7 @@ type
 		Data: ComData;
 		BuffData: BufferData;
 		ACK: Boolean;
+//		RS232: TLazSerial;
 
 	public
 
@@ -201,7 +207,8 @@ var
 begin
 
 	 // RS232 init
-
+//	RS232 := TLazSerial.Create(Self);
+//	RS232.OnRxData := @RS232RxData;
 	COMNames := GetSerialPorts;
 	CBRS232Port.Clear;
 
@@ -248,6 +255,11 @@ end;
 procedure TTestAVRForm.FormDestroy(Sender: TObject);
 begin
 	RS232.Destroy;
+end;
+
+procedure TTestAVRForm.MainSplitterResize(Sender: TObject);
+begin
+ MainSplitter.Position := 250;
 end;
 
 {$ENDREGION 'Form'}
@@ -407,8 +419,11 @@ begin
 		BRS232Start.Caption := 'Stop RS232';
 
 {$IFDEF UNIX}
-RS232.SynSer.NonBlock := True;
+
+	RS232.SynSer.NonBlock := True;
+
 {$ENDIF}
+
 		try
 			RS232.Open;
 		except
@@ -439,6 +454,14 @@ RS232.SynSer.NonBlock := True;
 		SetButtons(False);
 		RealSleep(1000);
 	end;
+end;
+
+// ****************
+// ***** Exit *****
+// ****************
+procedure TTestAVRForm.BExitClick(Sender: TObject);
+begin
+	Close;
 end;
 
 // ***************************
