@@ -3,7 +3,7 @@
 **UnoLib** is a Pascal library designed for the Arduino Uno platform and [AVRPascal](http://akarwowski.pl/index.php?page=electronics&lang=en) or other editor using FPC 3.3.1 for AVR microcontrollers (e.g. FreePascal IDE, Lazarus).
 It is a translation of a subset of the standard Arduino libraries, adapted as needed for a Pascal environment. Moreover, support for fixed point numbers has been added.
 
-Written 2022-2025 by @ackarwow in collaboration with @Dzandaa (from 2024)
+Written by @ackarwow in collaboration with @Dzandaa (from 2024)
 
 ![AVRPascal](UnoLib_AVRPascal.png)
 
