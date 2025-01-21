@@ -52,13 +52,20 @@ Some extra code is placed in "extras" directory:
 Lazarus test projects are placed in "tests" directory:
 
 - conversion - routines for numeric and string conversion and data preparation for CORDIC algorithm (by @Dzandaa with collaboration of @ackarwow)
-- float32 - test programs for testing TFloat32 type both on Lazarus and on Arduino side (based on serial port communication program by @Dzandaa)  
+- float32 - test programs for testing TFloat32 type both on Lazarus and on Arduino side (based on serial port communication program by @Dzandaa)
 - serial - serial port communication test (by @Dzandaa)
 
 Before compiling a given program, make sure that the library modules listed in the uses section
 have already been compiled.
 
 ## Changes
+
+### version 0.9 - 21/01/2025 (AVRPascal 3.1)
+
+ - added float32.pas module supporting 32-bit floating point numbers (in collaboration with @Dzandaa)
+ - added test programs for serial communication, TFloat32, and conversions, placed in "tests" folder (written by @Dzandaa, some of them modified by @ackarwow)
+
+@Dzandaa started collaborating on the development of UnoLib.
 
 ### version 0.8 - 09/12/2024 (AVRPascal 3.0)
 

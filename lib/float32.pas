@@ -1,5 +1,9 @@
 unit float32;
 
+{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
+ {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+{$ENDIF}
+
 {$mode ObjFPC}{$H+}
 {
   translation of Float32 library from C# to Pascal by Andrzej Karwowski (2024)
