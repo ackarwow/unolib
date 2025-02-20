@@ -5,7 +5,7 @@ It is a translation of a subset of the standard Arduino libraries, adapted as ne
 
 Written by @ackarwow in collaboration with @Dzandaa (from 2024)
 
-![AVRPascal](UnoLib_AVRPascal.png)
+![UnoLib](UnoLib.png)
 
 Library modules included:
 
@@ -17,13 +17,20 @@ Library modules included:
  - fix16.pas - support for fixed point numbers
  - float32.pas - support for floating point numbers, basic arithmetic and trigonometric operations (in collaboration with @Dzandaa)
  - hardwareserial.pas - support for serial communication
+ - i2c.pas - support for I2C communication bus (by @Dzandaa, many thanks for @ccrause)
  - liquidcrystal.pas - support for LCD
+ - stringutils.pas - string conversion routiones (by @Dzandaa) 
  - timer.pas - time-related routines
 
 The library modules are located in the "lib" directory.
 
 The "examples" directory contains simple sample programs using UnoLib modules:
 
+ - DS137ZN_RTC_Test.pas - Real Time Clock test using I2C (by @Dzandaa)
+ - HMC5883L_Magnetometer_Test.pas - HMC5883L Magnetometer test using I2C (by @Dzandaa)
+ - I2CScan.pas - I2C bus scan (by @Dzandaa)
+ - pcf8591t_ACDC_Read.pas - ACDC read test (by @Dzandaa)
+ - pcf8591t_ACDC_Write.pas - ACDC write test (by @Dzandaa)
  - TestBlink.pas - turns on and off the built-in LED
  - TestBlinkWithoutDelay.pas - turns on and off the built-in LED using Millis
  - TestDHT11.pas - displays information about the temperature and humidity of the air
