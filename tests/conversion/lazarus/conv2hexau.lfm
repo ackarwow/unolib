@@ -1,12 +1,13 @@
 object Conv2HexaForm: TConv2HexaForm
-  Left = 2003
+  Left = 1941
   Height = 493
-  Top = 236
+  Top = 340
   Width = 651
   Caption = 'Convert To Hexa'
   ClientHeight = 493
   ClientWidth = 651
   Position = poWorkAreaCenter
+  LCLVersion = '3.4.0.0'
   object MLog: TMemo
     Left = 8
     Height = 376
@@ -45,8 +46,8 @@ object Conv2HexaForm: TConv2HexaForm
         Top = 6
         Width = 78
         Caption = 'Dec 2 Hex'
-        OnClick = BDec2HexClick
         TabOrder = 0
+        OnClick = BDec2HexClick
       end
       object FSEValue: TFloatSpinEdit
         Left = 96
@@ -63,8 +64,8 @@ object Conv2HexaForm: TConv2HexaForm
         Top = 38
         Width = 78
         Caption = 'Hex 2 Dec'
-        OnClick = BHex2DecClick
         TabOrder = 2
+        OnClick = BHex2DecClick
       end
       object TBHexa: TEdit
         Left = 96
@@ -73,8 +74,8 @@ object Conv2HexaForm: TConv2HexaForm
         Width = 99
         AutoSize = False
         MaxLength = 8
-        OnKeyPress = TBHexaKeyPress
         TabOrder = 3
+        OnKeyPress = TBHexaKeyPress
       end
       object BUInt322Str: TButton
         Left = 208
@@ -82,8 +83,8 @@ object Conv2HexaForm: TConv2HexaForm
         Top = 5
         Width = 86
         Caption = 'UInt32 2 Str'
-        OnClick = BUInt322StrClick
         TabOrder = 4
+        OnClick = BUInt322StrClick
       end
       object SPUInt32: TSpinEdit
         Left = 303
@@ -101,8 +102,8 @@ object Conv2HexaForm: TConv2HexaForm
         Top = 38
         Width = 86
         Caption = 'Dec 2 Fix16'
-        OnClick = BDec2FixClick
         TabOrder = 6
+        OnClick = BDec2FixClick
       end
       object FFEValue: TFloatSpinEdit
         Left = 303
@@ -131,8 +132,8 @@ object Conv2HexaForm: TConv2HexaForm
         Top = 6
         Width = 75
         Caption = 'Cordic'
-        OnClick = BCordicClick
         TabOrder = 0
+        OnClick = BCordicClick
       end
       object SPIterations: TSpinEdit
         Left = 104
@@ -143,6 +144,15 @@ object Conv2HexaForm: TConv2HexaForm
         MinValue = 16
         TabOrder = 1
         Value = 32
+      end
+      object BSinus: TButton
+        Left = 16
+        Height = 25
+        Top = 41
+        Width = 75
+        Caption = 'Sinus'
+        TabOrder = 2
+        OnClick = BSinusClick
       end
     end
   end

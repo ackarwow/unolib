@@ -18,6 +18,7 @@ type
                 BDec2Fix: TButton;
                 BHex2Dec: TButton;
                 BUInt322Str: TButton;
+																BSinus: TButton;
                 FSEValue: TFloatSpinEdit;
                 FFEValue: TFloatSpinEdit;
                 gbConversion: TGroupBox;
@@ -31,6 +32,7 @@ type
 		procedure BCordicClick(Sender: TObject);
                 procedure BDec2FixClick(Sender: TObject);
 		procedure BHex2DecClick(Sender: TObject);
+		procedure BSinusClick(Sender: TObject);
 		procedure BUInt322StrClick(Sender: TObject);
 		procedure SPUInt32KeyPress(Sender: TObject; var Key: char);
 		procedure TBHexaKeyPress(Sender: TObject; var Key: char);
@@ -130,6 +132,39 @@ procedure TConv2HexaForm.BHex2DecClick(Sender: TObject);
 begin
 
 	MLog.Append('Hex: $' + TBHexa.Text + ' Dec: ' + Hex2Dec(TBHexa.Text).ToString);
+
+end;
+
+procedure TConv2HexaForm.BSinusClick(Sender: TObject);
+var
+	fsin, fstep, fval: Real;
+	iStep, i: UInt8;
+	Str: String;
+begin
+	Str := 'Const' + LineEnding;
+	Str := Str + ' SinWave: Array[0..255] of Uint8 = ' + LineEnding;
+	Str := Str + '('+LineEnding;
+
+	fsin := -1.0;
+	fstep := 2.0 / 255.0;
+	i := 0;
+	// Sinus Table
+	while (True) do
+	begin
+		if(((i mod 8) = 0) and (i <> 0)) then
+			Str := Str + LineEnding;
+		fval := (sin(fsin) * 127.0) + 127.0;
+		iStep := UInt8(Round(fval));
+		Str := Str + '$' + IntToHex(iStep);
+		if(i< 255) then Str := Str + ', ';
+		if(i = 255) then break;
+		inc(i);
+		fsin := -1.0 + (fstep * i);
+//		fsin := fsin + fstep;
+	end;
+	Str := Str + LineEnding;
+	Str := Str + ');';
+	MLog.Append(Str);
 
 end;
 
