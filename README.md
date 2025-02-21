@@ -17,9 +17,9 @@ Library modules included:
  - fix16.pas - support for fixed point numbers
  - float32.pas - support for floating point numbers, basic arithmetic and trigonometric operations (in collaboration with @Dzandaa)
  - hardwareserial.pas - support for serial communication
- - i2c.pas - support for I2C communication bus (by @Dzandaa, many thanks for @ccrause)
+ - i2c.pas - support for I2C communication bus (by @Dzandaa, many thanks to @ccrause)
  - liquidcrystal.pas - support for LCD
- - stringutils.pas - string conversion routiones (by @Dzandaa) 
+ - stringutils.pas - string conversion routiones (by @Dzandaa)
  - timer.pas - time-related routines
 
 The library modules are located in the "lib" directory.
