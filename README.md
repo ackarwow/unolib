@@ -19,6 +19,7 @@ Library modules included:
  - hardwareserial.pas - support for serial communication
  - i2c.pas - support for I2C communication bus (by @Dzandaa, many thanks to @ccrause)
  - liquidcrystal.pas - support for LCD
+ - pulse.pas - routines for reading a pulse on a pin (additional function written by @Dzandaa returns length of the pulse in milliseconds)
  - stringutils.pas - string conversion routiones (by @Dzandaa)
  - timer.pas - time-related routines
 
@@ -36,6 +37,7 @@ The "examples" directory contains simple sample programs using UnoLib modules:
  - TestDHT11.pas - displays information about the temperature and humidity of the air
 from the DHT11 sensor on an external LCD display
  - TestDigital.pas - turns on and off the built-in LED based on the button state
+ - TestHC-SR04 - example of using HC-SR04 ultrasonic sensor
  - TestLCAutoscroll.pas - scrolls text on the LCD display
  - TestLCBlink.pas - displays the text "hello, world!" on the LCD display
  - TestLCChars.pas - displays non-standard characters on the LCD display
