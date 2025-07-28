@@ -22,6 +22,7 @@ Library modules included:
  - pulse.pas - routines for reading a pulse on a pin (additional function written by @Dzandaa returns length of the pulse in milliseconds)
  - stringutils.pas - string conversion routiones (by @Dzandaa)
  - timer.pas - time-related routines
+ - tone.pas - square wave tone routines
 
 The library modules are located in the "lib" directory.
 
@@ -49,6 +50,7 @@ display
  - TestLM35.pas - displays the temperature value from the LM35 sensor on the LCD
 display
  - TestSerial.pas - sends and receives data via the serial port
+ - TestTone.pas - plays a melody using _tone routine
 
 Some extra code is placed in "extras" directory:
 
@@ -68,6 +70,13 @@ Before compiling a given program, make sure that the library modules listed in t
 have already been compiled.
 
 ## Changes
+
+### version 1.0 - 28/07/2025
+
+ - added square wave tone routines and example (ToneNoInt by @Myel)
+ - added pulsein routines and example (pulseInMilli by @Dzandaa)
+ - added i2c module and examples of its use (by @Dzandaa)
+ - added sine table generation for conv2hexa (by @Dzandaa)
 
 ### version 0.9 - 21/01/2025 (AVRPascal 3.1)
 

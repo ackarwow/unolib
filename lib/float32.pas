@@ -1343,6 +1343,7 @@ begin
   end;
 end;
 
+//warning: conversion does not work for scientific notation (eg. 1.23E-1)
 function TryStrToFloat32(const s: PChar; const len: UInt8; out rValue: TFloat32): boolean;
 const
   FL_ANY       = $01; // any digit was readed
