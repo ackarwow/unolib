@@ -406,7 +406,7 @@ var
   LockEP: TLockEP;
 begin
   LockEP.LockEP(ep); //LockEP lock(ep);      ??????????????
-  if (not ReadWriteAllowed>0) then
+  if (ReadWriteAllowed=0) then
     Result:=0
   else
     Result:=USB_EP_SIZE - FifoByteCount;
@@ -425,7 +425,7 @@ begin
   if (_usbConfiguration=0) then
     Exit(-1);
 
-  if (_usbSuspendState>0) and ((1 shl SUSPI)>0) then
+  if (_usbSuspendState and (1 shl SUSPI)) > 0 then
     UDCON:=UDCON or (1 shl RMWKUP); //send a remote wakeup
 
   r:=len;
@@ -453,14 +453,13 @@ begin
 
     len:=len-n;
 
-    LockEP.LockEP(ep); //LockEP lock(ep);      ??????????????
+    LockEP.LockEP(ep);
     while (n>0) do
     begin
       Send8(data^);
       Inc(data);
       Dec(n);
     end;
-    LockEP.UnlockEP;
 
     if (sendZlp) then
     begin
@@ -473,7 +472,10 @@ begin
       if (len = 0) then
         sendZlp:= true;
     end;
+
+    LockEP.UnlockEP;
   end;
+
   TXLED1; // light the TX LED
   TxLEDPulse:= TX_RX_LED_PULSE_MS;
   Result:=r;
@@ -722,7 +724,7 @@ begin
   // the WAKEUPI interrupt is triggered as soon as there are non-idle patterns on the data
   // lines. Thus, the WAKEUPI interrupt can occur even if the controller is not in the "suspend" mode.
   // Therefore the we enable it only when USB is suspended
-  if (_udint>0) and ((1 shl WAKEUPI)>0) then
+  if (_udint and (1 shl WAKEUPI)) > 0 then
   begin
     UDIEN:= (UDIEN and not (1 shl WAKEUPE)) or (1 shl SUSPE); // Disable interrupts for WAKEUP and enable interrupts for SUSPEND
 
@@ -732,7 +734,7 @@ begin
     UDINT:= UDINT and not (1 shl WAKEUPI);
     _usbSuspendState:= (_usbSuspendState and not (1 shl SUSPI)) or (1 shl WAKEUPI);
   end
-  else if (udint>0) and ((1 shl SUSPI)>0) then // only one of the WAKEUPI / SUSPI bits can be active at time
+  else if (udint and (1 shl SUSPI)) > 0 then // only one of the WAKEUPI / SUSPI bits can be active at time
   begin
     UDIEN:= (UDIEN and not (1 shl SUSPE)) or (1 shl WAKEUPE); // Disable interrupts for SUSPEND and enable interrupts for WAKEUP
 
