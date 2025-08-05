@@ -230,7 +230,7 @@ type
   end;
 
 const
-  RAMEND = FPC_SRAMBASE+FPC_SRAMSIZE;
+  RAMEND = (FPC_SRAMBASE + FPC_SRAMSIZE - 1);  // Last On-Chip SRAM Location
 
   USB_VERSION = $200;
   USB_VID = $2341;
@@ -347,7 +347,7 @@ uses
 function isLUFAbootloader: boolean;
 begin
   //return pgm_read_word(FLASHEND - 1) == NEW_LUFA_SIGNATURE;
-  Result:=PUInt16(FLASHEND-1)^= NEW_LUFA_SIGNATURE;
+  Result:=PUInt16(FLASHEND-1)^= NEW_LUFA_SIGNATURE; //WRONG! - TODO prepare and use pgm_read_word function
 end;
 
 function CDC_GetInterface(var interfaceNum: UInt8): Int16;
@@ -405,11 +405,8 @@ begin
       begin
         // For future boards save the key in the inproblematic RAMEND
         // Which is reserved for the main() return value (which will never return)
-        if (isLUFAbootloader()) then
-        begin
-	  // hooray, we got a new bootloader!
-	  magickeypos:=RAMEND-1;
-        end;
+        if (isLUFAbootloader()) then // hooray, we got a new bootloader!
+	        magickeypos:=RAMEND-1;
       end;
 
       // We check DTR state to determine if host port is open (bit 0 of lineState).
@@ -420,37 +417,37 @@ begin
           // Backup ram value if its not a newer bootloader and it hasn't already been saved.
           // This should avoid memory corruption at least a bit, not fully
           if ((magickeypos <> (RAMEND-1)) and (PUint16(magic_key_pos)^ <> MAGIC_KEY)) then
-          begin
-	    PUint16(RAMEND-1)^:=PUint16(magic_key_pos)^;
-          end;
+             PUint16(RAMEND-1)^:=PUint16(magic_key_pos)^;
         end;
-	// Store boot key
-	PUint16(magic_key_pos)^:= MAGIC_KEY;
-	// Save the watchdog state in case the reset is aborted.
-	wdtcsr_save:= WDTCSR;
-	wdt_enable(WDTO_120MS);
+	      // Store boot key
+	      PUint16(magic_key_pos)^:= MAGIC_KEY;
+	      // Save the watchdog state in case the reset is aborted.
+	      wdtcsr_save:= WDTCSR;
+	      wdt_enable(WDTO_120MS);
+        {$IFDEF AVRPASCAL}
+        while (true) do;
+        {$ENDIF}
       end
       else if (PUInt16(magic_key_pos)^ = MAGIC_KEY) then
       begin
-	// Most OSs do some intermediate steps when configuring ports and DTR can
-	// twiggle more than once before stabilizing.
-	// To avoid spurious resets we set the watchdog to 120ms and eventually
-	// cancel if DTR goes back high.
-	// Cancellation is only done if an auto-reset was started, which is
-	// indicated by the magic key having been set.
-
-	wdt_reset();
-	// Restore the watchdog state in case the sketch was using it.
-	WDTCSR:=WDTCSR or (1 shl WDCE) or (1 shl WDE);
-	WDTCSR:= wdtcsr_save;
+	      // Most OSs do some intermediate steps when configuring ports and DTR can
+	      // twiggle more than once before stabilizing.
+	      // To avoid spurious resets we set the watchdog to 120ms and eventually
+	      // cancel if DTR goes back high.
+	      // Cancellation is only done if an auto-reset was started, which is
+	      // indicated by the magic key having been set.
+	      wdt_reset();
+	      // Restore the watchdog state in case the sketch was using it.
+	      WDTCSR:=WDTCSR or (1 shl WDCE) or (1 shl WDE);
+	      WDTCSR:= wdtcsr_save;
         if MAGIC_KEY_POS <> (RAMEND-1) then
         begin
           // Restore backed up (old bootloader) magic key data
           if (magickeypos <> (RAMEND-1)) then
             PUint16(magic_key_pos)^:= PUint16(RAMEND-1)^;
         end;
-	// Clean up RAMEND key
-	PUint16(magic_key_pos)^:=$0000;
+	      // Clean up RAMEND key
+	      PUint16(magic_key_pos)^:=$0000;
       end;
     end;
     Result:=true;

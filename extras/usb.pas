@@ -548,7 +548,7 @@ begin
     ClearOUT();
     Dec(length, recvLength);
   end;
-  Exit(len);
+  Result:=len;
 end;
 
 //	Number of bytes, assumes a rx endpoint

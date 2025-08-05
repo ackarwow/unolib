@@ -70,11 +70,11 @@ end;
 
 {procedure wdt_enable(value: UInt8);
 begin
-  Cli;                                             // turn off interrupts
+  avr_cli;                                             // turn off interrupts
   wdt_reset;                                       // reset watchdog
   WDTCSR:=WDTCSR or ((1 shl WDCE) or (1 shl WDE)); // send special value to command register enabling it to be editted
   WDTCSR:=UInt8((1 shl WDE) or (value));	          	   // set new prescaler time
-  Sei;                                             // turn on interrupts
+  avr_sei;                                             // turn on interrupts
 end;}
 
 procedure wdt_enable(value: UInt8);
@@ -99,8 +99,44 @@ begin
     sts WDTCSR, r16
     sei                     // turn on interrupts
   end['r16'];
-
 end;
+
+(*
+  Arduino code for wdt_enable
+
+WDTCSR : byte absolute $00+$60
+
+#if defined(WDTCSR)
+#  define _WD_CONTROL_REG     WDTCSR
+#elif defined(WDTCR)
+#  define _WD_CONTROL_REG     WDTCR
+#else
+#  define _WD_CONTROL_REG     WDT
+#endif
+
+		__asm__ __volatile__ (
+				"in __tmp_reg__,__SREG__" "\n\t"
+				"cli" "\n\t"
+				"wdr" "\n\t"
+				"sts %0, %1" "\n\t"
+				"out __SREG__,__tmp_reg__" "\n\t"
+				"sts %0, %2" "\n \t"
+				: /* no outputs */
+				: "n" (_SFR_MEM_ADDR(_WD_CONTROL_REG)),
+				"r" ((uint8_t)(_BV(_WD_CHANGE_BIT) | _BV(WDE))),
+				"r" ((uint8_t) ((value & 0x08 ? _WD_PS3_MASK : 0x00) |
+						_BV(WDE) | (value & 0x07)) )
+				: "r0"
+		);
+
+ cec:	0f b6       	in	r0, 0x3f	; 63
+ cee:	f8 94       	cli
+ cf0:	a8 95       	wdr
+ cf2:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+ cf6:	0f be       	out	0x3f, r0	; 63
+ cf8:	90 93 60 00 	sts	0x0060, r25	; 0x800060 <__DATA_REGION_ORIGIN__>
+
+*)
 
 end.
 

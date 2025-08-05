@@ -1,26 +1,21 @@
 program ccrause_test_leonardo;
 
 uses
-  cdc, usb, intrinsics;
-
-const
-  LEDpinMask = 1 shl 4;
+  cdc, usb, intrinsics, debug_leonardo;
 
 var
   serial: TCDCSerial;
   c: byte;
-  LEDport: byte absolute PORTb;
-  LEDddr: byte absolute DDRB;
 begin
   USBDevice.attach;
   avr_sei;
   serial.Start(9600);
 
   repeat
-    LEDport := LEDport xor LEDpinMask;
+    //LedOFF;
     if serial.Available > 0 then
     begin
-      LEDport := LEDport xor LEDpinMask;
+      //LedON;
       c:=serial.Read;
       serial.Write(c+1);
     end;
