@@ -344,10 +344,18 @@ implementation
 uses
   ccrause_delay, intrinsics;
 
-function isLUFAbootloader: boolean;
+//after https://github.com/ccrause/fpc-avr/blob/33856a5abc210138f61e9c13f567a8f4ac7e1486/src/library/progmem.pas#L30
+function pgm_read_word(const address: pointer): UInt16; assembler; nostackframe;
+asm
+  movw ZL, r24
+  lpm r24, Z+
+  lpm r25, Z
+end['r24', 'r25', 'r30', 'r31'];
+
+function IsLUFABootloader: boolean;
 begin
   //return pgm_read_word(FLASHEND - 1) == NEW_LUFA_SIGNATURE;
-  Result:=PUInt16(FLASHEND-1)^= NEW_LUFA_SIGNATURE; //WRONG! - TODO prepare and use pgm_read_word function
+  Result:=pgm_read_word(Pointer(FLASHEND-1))= NEW_LUFA_SIGNATURE;
 end;
 
 function CDC_GetInterface(var interfaceNum: UInt8): Int16;
