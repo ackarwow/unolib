@@ -12,10 +12,11 @@ Bauds: 9600
 Data bits: 8
 Stop bits: 1
 Parity: None
+Line Ending: New Line
 
 How to test via serial port monitor:
-type ON* to turn on internal LED
-type OFF* to turn off internal LED
+type ON to turn on internal LED
+type OFF to turn off internal LED
 }
 
 uses
@@ -30,6 +31,7 @@ var
 begin
   PinMode(LedPin, OUTPUT);
   Serial.Start(9600);
+  Serial.WriteLn('Serial connection started, waiting for instructions...');
   sInData:='';
 
   while True do
@@ -37,8 +39,8 @@ begin
     while (Serial.Available>0) do
     begin
       cReceived:=Serial.ReadChar;
-      // Process message when '*' character is recieved
-      if (cReceived = '*') then
+      // Process message when new line character is recieved
+      if (cReceived = #10) then
       begin
         Serial.Write('My Arduino received: ');
         Serial.WriteLn(sInData);
