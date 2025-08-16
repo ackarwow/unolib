@@ -56,7 +56,9 @@ Some extra code is placed in "extras" directory:
 
  - ccrause_blink_leonardo.pas - blink example for Arduino Leonardo based on code written by @ccrause
  - ccrause_delay.pas - delay module based on code written by @ccrause
+ - ccrause_test_leonardo.pas - serial communication example for Arduino Leonardo based on code written by @ccrause
  - cdc.pas - CDC support for Arduino Leonardo
+ - debug_leonardo.pas - simple LED-based debug code
  - usb.pas - USB support for Arduino Leonardo
  - wdt.pas - watchdog timer routines
 
@@ -70,6 +72,12 @@ Before compiling a given program, make sure that the library modules listed in t
 have already been compiled.
 
 ## Changes
+
+### version 1.1 - 16/08/2025 (AVRPascal 3.3)
+
+ - fixes in support for Arduino Leonardo
+
+Many thanks to @ccrause for his suggestions and help
 
 ### version 1.0 - 28/07/2025
 
