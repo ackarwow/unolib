@@ -1,10 +1,8 @@
 unit float32;
 
-{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
- {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
-{$ENDIF}
-
 {$mode ObjFPC}{$H+}
+{$MODESWITCH ADVANCEDRECORDS}
+
 {
   translation of Float32 library from C# to Pascal by Andrzej Karwowski (2024)
   C# source: https://github.com/Kimbatt/soft-float-starter-pack
@@ -17,83 +15,156 @@ unit float32;
   - Float32Sqrt, Float32Abs, Float32Inv, Float32InvSqrt, Float32Deg2Rad,
     Float32Rad2Deg, Float32Sinus, Float32Cosinus, Float32Tan, Float32Cotan,
     Float32Int, Float32Log2, Float32IntPow
+  - and all routines for TFloat32 type
+
 }
 
 interface
 
 type
-  TFloat32 = UInt32;
+  TRawFloat32 = UInt32;
 
-  {TFloat32Rec=bitpacked record
-  mantissa: 0..8388607;
-       exp: 0..255;
-      sign: 0..1;
-  end;}
+  TRawFloat32Rec=bitpacked record
+    mantissa: 0..8388607;
+    exp: 0..255;
+    sign: 0..1;
+  end;
 
 const
   MANTISSA_BIT_SIZE = 23;
   UINT32_BIT_SIZE = 32;
 
-function Float32Add(const f1, f2: TFloat32): TFloat32;
-function Float32Neg(const f1: TFloat32): TFloat32;
-function Float32Sub(const f1, f2: TFloat32): TFloat32;
-function Float32Mul(const f1, f2: TFloat32): TFloat32;
-function Float32Comp(const f1, f2: TFloat32): Int16;
-function Float32Div(const f1, f2: TFloat32): TFloat32;
-function Float32Mod(const f1, f2: TFloat32): TFloat32;
-function Float32ToInt(const f: TFloat32): Int32;
-function IntToFloat32(const value: Int32):TFloat32;
+function Float32Add(const f1, f2: TRawFloat32): TRawFloat32;
+function Float32Neg(const f1: TRawFloat32): TRawFloat32;
+function Float32Sub(const f1, f2: TRawFloat32): TRawFloat32;
+function Float32Mul(const f1, f2: TRawFloat32): TRawFloat32;
+function Float32Comp(const f1, f2: TRawFloat32): Int16;
+function Float32Div(const f1, f2: TRawFloat32): TRawFloat32;
+function Float32Mod(const f1, f2: TRawFloat32): TRawFloat32;
+function Float32ToInt(const f: TRawFloat32): Int32;
+function IntToFloat32(const value: Int32):TRawFloat32;
 
 {routines by @Dzandaa}
-function Float32Sqrt(const f1: TFloat32): TFloat32;
-function Float32Abs(const f1: TFloat32): TFloat32;
-function Float32Inv(const f1: TFloat32): TFloat32;
-function Float32InvSqrt(const f1: TFloat32): TFloat32;
-function Float32Deg2Rad(const f1: TFloat32): TFloat32;
-function Float32Rad2Deg(const f1: TFloat32): TFloat32;
-function Float32Int(const f1: TFloat32): TFloat32;
-function Float32Sin(const f1: TFloat32): TFloat32;
-function Float32Cos(const f1: TFloat32): TFloat32;
-function Float32Tan(const f1: TFloat32): TFloat32;
-function Float32Cotan(const f1: TFloat32): TFloat32;
-function Float32Log2(const f1: TFloat32): TFloat32;
-function Float32Ln(const f1: TFloat32): TFloat32;
-function Float32Log10(const f1: TFloat32): TFloat32;
-function Float32IntPow(x: TFloat32; n: Int32): TFloat32;
+function Float32Sqrt(const f1: TRawFloat32): TRawFloat32;
+function Float32Abs(const f1: TRawFloat32): TRawFloat32;
+function Float32Inv(const f1: TRawFloat32): TRawFloat32;
+function Float32InvSqrt(const f1: TRawFloat32): TRawFloat32;
+function Float32Deg2Rad(const f1: TRawFloat32): TRawFloat32;
+function Float32Rad2Deg(const f1: TRawFloat32): TRawFloat32;
+function Float32Int(const f1: TRawFloat32): TRawFloat32;
+function Float32Sin(const f1: TRawFloat32): TRawFloat32;
+function Float32Cos(const f1: TRawFloat32): TRawFloat32;
+function Float32Tan(const f1: TRawFloat32): TRawFloat32;
+function Float32Cotan(const f1: TRawFloat32): TRawFloat32;
+function Float32Log2(const f1: TRawFloat32): TRawFloat32;
+function Float32Ln(const f1: TRawFloat32): TRawFloat32;
+function Float32Log10(const f1: TRawFloat32): TRawFloat32;
+function Float32IntPow(x: TRawFloat32; n: Int32): TRawFloat32;
 {end of routines by @Dzandaa}
 
-function StrToFloat32(const s: PChar; const len: UInt8; out rerror: boolean): TFloat32;
-function Float32ToStr(const s: PChar; const maxlen: UInt8; f: TFloat32): UInt8;
+function StrToFloat32(const s: PChar; const len: UInt8; out rerror: boolean): TRawFloat32;
+{by @Dzandaa and @ackarwow}
+function Float32ToStr(const s: PChar; const maxlen, decplaces: UInt8; f: TRawFloat32): UInt8;
+{by @Dzandaa and @ackarwow}
+function Float32ToStrE(const s: PChar; const maxlen, decplaces: UInt8; f: TRawFloat32): UInt8;
 
 //additional test funtion, to be modified as needed
-function Float32Test(const f1, f2: TFloat32): TFloat32;
+function Float32Test(const f1, f2: TRawFloat32): TRawFloat32;
 
-function Float32Pow(const f1, f2: TFloat32): TFloat32;
-function Float32Exp(const f1: TFloat32): TFloat32;
+function Float32Pow(const f1, f2: TRawFloat32): TRawFloat32;
+function Float32Exp(const f1: TRawFloat32): TRawFloat32;
+
+function IsNegative(const aValue: TRawFloat32): boolean;
+
+{ TFloat32 }
+
+type
+  PkFloat32=packed record
+	case
+		boolean of
+			true: (Raw: TRawFloat32);
+			false: (Value: TRawFloat32Rec);
+  end;
+
+  TFloat32String=string[21]; //buffers for string representation of TFloat32 numbers
+
+  TFloat32=packed record
+		RawData: PkFloat32;
+
+// Mathematic
+		class operator + (f1, f2: TFloat32): TFloat32;
+		class operator - (f1, f2: TFloat32): TFloat32;
+		class operator * (f1, f2: TFloat32): TFloat32;
+		class operator / (f1, f2: TFloat32): TFloat32;
+		class operator mod (f1, f2: TFloat32): TFloat32;
+
+// Comparison
+		class operator = (f1, f2: TFloat32): boolean;
+		class operator > (f1, f2: TFloat32): boolean;
+		class operator < (f1, f2: TFloat32): boolean;
+		class operator >= (f1, f2: TFloat32): boolean;
+		class operator <= (f1, f2: TFloat32): boolean;
+		class operator <> (f1, f2: TFloat32): boolean;
+
+// Creation and Strings
+		constructor Create(f1: TRawFloat32);
+		constructor Create(Str: TFloat32String);
+		function ToString(DecPlaces: UInt8):TFloat32String;
+		function ToStringE(DecPlaces: UInt8):TFloat32String;
+		function ToInt32():Int32;
+		function Sign(): Integer;
+		function Frac(): Integer;
+		function Exp(): Integer;
+		function Raw(): UInt32;
+	end;
+
+// Scientific
+function StringToFloat32(Str: TFloat32String): TFloat32;
+function SqrtFloat32(const f1: TFloat32): TFloat32;
+function AbsFloat32(const f1: TFloat32): TFloat32;
+function InvFloat32(const f1: TFloat32): TFloat32;
+function InvSqrtFloat32(const f1: TFloat32): TFloat32;
+function Deg2RadFloat32(const f1: TFloat32): TFloat32;
+function Rad2DegFloat32(const f1: TFloat32): TFloat32;
+function IntFloat32(const f1: TFloat32): TFloat32;
+function SinFloat32(const f1: TFloat32): TFloat32;
+function CosFloat32(const f1: TFloat32): TFloat32;
+function TanFloat32(const f1: TFloat32): TFloat32;
+function CotanFloat32(const f1: TFloat32): TFloat32;
+function Log2Float32(const f1: TFloat32): TFloat32;
+function LnFloat32(const f1: TFloat32): TFloat32;
+function Log10Float32(const f1: TFloat32): TFloat32;
+function IntPowFloat32(f1: TFloat32; n: Int32): TFloat32;
+function Int32ToFloat32(const value: Int32):TFloat32;
+function NegFloat32(const f1: TFloat32):TFloat32;
 
 implementation
 
-
-{$ifdef DebugStrings}
 uses
-  Dialogs, SysUtils, StrUtils;
+  stringutils
+{$ifdef DebugStrings}
+  Dialogs, SysUtils, StrUtils
 {$endif}
+  ;
+
+{ TRawFloat32 Routines }
 
 const
-  SignMask: TFloat32 = $80000000;
+  SignMask: TRawFloat32 = $80000000;
   MantissaBits: Int32 = 23;
   ExponentBias: Int32 = 127;
 
-  RawZero: TFloat32 = 0;
-  RawNaN: TFloat32 = $FFC00000;//same as float.NaN
-  RawPositiveInfinity: TFloat32 = $7F800000;
-  RawNegativeInfinity: TFloat32 = {(RawPositiveInfinity xor SignMask)} $FF800000;
-  RawOne: TFloat32 = $3F800000;
-  RawTwo: TFloat32 = $40000000;
-  //RawMinusOne: TFloat32 =  {RawOne xor SignMask} $BF800000;
-  //RawMaxValue: TFloat32 =  $7F7FFFFF;
-  //RawMinValue: TFloat32 =  { $7F7FFFFF xor SignMask} $FF7FFFFF;
-  //RawEpsilon: TFloat32 = $00000001;
+  RawZero: TRawFloat32 = 0;
+  RawNaN: TRawFloat32 = $FFC00000;//same as float.NaN
+  RawPositiveInfinity: TRawFloat32 = $7F800000;
+  RawNegativeInfinity: TRawFloat32 = {(RawPositiveInfinity xor SignMask)} $FF800000;
+  RawOne: TRawFloat32 = $3F800000;
+  RawTwo: TRawFloat32 = $40000000;
+  RawTen: TRawFloat32 = $41200000;
+  //RawMinusOne: TRawFloat32 =  {RawOne xor SignMask} $BF800000;
+  //RawMaxValue: TRawFloat32 =  $7F7FFFFF;
+  //RawMinValue: TRawFloat32 =  { $7F7FFFFF xor SignMask} $FF7FFFFF;
+  //RawEpsilon: TRawFloat32 = $00000001;
   //ULONG_MAX:UInt32 = $FFFFFFFF;
   ULONG_MAX_DIV_10:UInt32 = $FFFFFFFF div 10;
 
@@ -140,24 +211,30 @@ begin
   Result:=msb[b];
 end;
 
-function RawMantissa(const aVal: TFloat32): UInt32; inline;
+//please do not change and use carefully
+function RawMantissa(const aVal: TRawFloat32): UInt32; inline;
 begin
   Result:=UInt32(aVal) and $7FFFFF;
+  //Result:= TRawFloat32Rec(aVal).mantissa;
 end;
 
-function RawExponent(const aVal: TFloat32): UInt8; inline;
+//please do not change and use carefully
+function RawExponent(const aVal: TRawFloat32): UInt8; inline;
 begin
   Result:=UInt8(UInt32(aVal) shr MantissaBits);
+  //Result:= TRawFloat32Rec(aVal).exp;
 end;
 
-function RawSign(const aVal: TFloat32): UInt32; inline; //Added by AK
+//please do not change and use carefully
+function RawSign(const aVal: TRawFloat32): UInt32; inline;
 var
   sVal: Int32 absolute aVal;
 begin
   Result:= UInt32(Int64(sVal) shr 31); ////HERE cast to Int64
+  //Result:= TRawFloat32Rec(aVal).sign;
 end;
 
-function Mantissa(const aVal: TFloat32): Int32;
+function Mantissa(const aVal: TRawFloat32): Int32;
 var
   sign: UInt32;
 begin
@@ -168,58 +245,63 @@ begin
     Result:=Int32((RawMantissa(aVal) xor sign) - sign);
 end;
 
-function Exponent(const aValue: TFloat32): Int8;
+function Exponent(const aValue: TRawFloat32): Int8;
 begin
   Result:=Int8(RawExponent(aValue) - ExponentBias);
 end;
 
 //negative value of number/operator -
-function Float32Neg(const f1: TFloat32): TFloat32;
+function Float32Neg(const f1: TRawFloat32): TRawFloat32;
 begin
   Result:=f1 xor $80000000;
 end;
 
-function IsFinite(const aValue: TFloat32): boolean;
+function IsFinite(const aValue: TRawFloat32): boolean;
 begin
   Result:=RawExponent(aValue) <> 255;
 end;
 
-function IsInfinity(const aValue: TFloat32): boolean;
+function IsInfinity(const aValue: TRawFloat32): boolean;
 begin
   Result:=(aValue and $7FFFFFFF) = $7F800000;
 end;
 
-function IsNegativeInfinity(const aValue: TFloat32): boolean;
+function IsNegativeInfinity(const aValue: TRawFloat32): boolean;
 begin
   Result:=aValue=RawNegativeInfinity;
 end;
 
-function IsPosiiveInfinity(const aValue: TFloat32): boolean;
+function IsPosiiveInfinity(const aValue: TRawFloat32): boolean;
 begin
   Result:=aValue=RawPositiveInfinity;
 end;
 
-function IsZero(const aValue: TFloat32): boolean;
+function IsZero(const aValue: TRawFloat32): boolean;
 begin
   Result:=(aValue and $7FFFFFFF) = 0;
 end;
 
-function IsNAN(const aValue: TFloat32): boolean;
+function IsNAN(const aValue: TRawFloat32): boolean;
 begin
   Result:=(RawExponent(aValue) = 255) and not IsInfinity(aValue);
 end;
 
-function IsPositive(const aValue: TFloat32): boolean;
+function IsSubnormal(const aValue: TRawFloat32): boolean;
+begin
+  Result:=(RawExponent(aValue) = 0);
+end;
+
+function IsPositive(const aValue: TRawFloat32): boolean;
 begin
   Result:=(aValue and $80000000) = 0;
 end;
 
-function IsNegative(const aValue: TFloat32): boolean;
+function IsNegative(const aValue: TRawFloat32): boolean;
 begin
   Result:=(aValue and $80000000) <> 0;
 end;
 
-function FromParts(const sign: boolean; const exponent, mantissa: UInt32): TFloat32;
+function FromParts(const sign: boolean; const exponent, mantissa: UInt32): TRawFloat32;
 begin
   if sign then
     Result:=SignMask or ((exponent and $ff) shl MantissaBits) or (mantissa and ((UInt32(1) shl MantissaBits) - 1))
@@ -227,7 +309,7 @@ begin
     Result:=0 or ((exponent and $ff) shl MantissaBits) or (mantissa and ((UInt32(1) shl MantissaBits) - 1));
 end;
 
-function InternalAdd(const f1, f2: TFloat32): TFloat32;
+function InternalAdd(const f1, f2: TRawFloat32): TRawFloat32;
 var
   rawExp1, rawExp2: UInt8;
   deltaExp: Int32;
@@ -275,7 +357,7 @@ begin
       {$R+}
       absMan:= Abs(man);
       if (absMan = 0) then
-        Exit(RawZero);
+        Exit(RawZero);  //                                          xor $80000000;
       rawExp:= rawExp1 - 6;
       shift:=clz(UInt32(absMan));
 
@@ -289,7 +371,7 @@ begin
       if (UInt32(rawExp - 1) < 254) then
       begin
         {*}raw:= (UInt32(man) and $80000000) or (UInt32(rawExp) shl 23) or (absMan and $7FFFFF);
-        Exit(TFloat32(raw));
+        Exit(TRawFloat32(raw));
       end
       else
       begin
@@ -303,7 +385,7 @@ begin
         if (rawExp >= -24) then//Fixme
         begin
           raw:= UInt32(man) and $80000000 or absMan shr (-rawExp + 1);
-          Exit(TFloat32(raw));
+          Exit(TRawFloat32(raw));
         end;
         Exit(RawZero);
       end
@@ -326,7 +408,7 @@ begin
   end;
 end;
 
-function Float32Add(const f1, f2: TFloat32): TFloat32;
+function Float32Add(const f1, f2: TRawFloat32): TRawFloat32;
 begin
   //return f1.RawExponent - f2.RawExponent >= 0 ? InternalAdd(f1, f2) : InternalAdd(f2, f1);
   if (RawExponent(f1)-RawExponent(f2))>=0 then
@@ -335,12 +417,12 @@ begin
     Result:=InternalAdd(f2, f1);
 end;
 
-function Float32Sub(const f1, f2: TFloat32): TFloat32;
+function Float32Sub(const f1, f2: TRawFloat32): TRawFloat32;
 begin
   Result:=Float32Add(f1, Float32Neg(f2));
 end;
 
-function Float32Mul(const f1, f2: TFloat32): TFloat32;
+function Float32Mul(const f1, f2: TRawFloat32): TRawFloat32;
 var
   man1, man2, rawExp1, rawExp2, rawExp, man, shift: Int32;
   sign1, sign2, sign, rawMan1, rawMan2, absMan: UInt32;
@@ -469,7 +551,7 @@ begin
   Result:=sign or UInt32(rawExp) shl MantissaBits or absMan and $7FFFFF;
 end;
 
-function Equals(const f1, f2: TFloat32): boolean;
+function Equals(const f1, f2: TRawFloat32): boolean;
 begin
   if (RawExponent(f1) <> 255) then
     Exit((f1 = f2) or ((f1 and $7FFFFFFF) = 0) and ((f2 and $7FFFFFFF) = 0)) //0==-0
@@ -492,7 +574,7 @@ begin
      result:=-1;
 end;
 
-function Float32Comp(const f1, f2: TFloat32): Int16;
+function Float32Comp(const f1, f2: TRawFloat32): Int16;
 var
   sign1, sign2: UInt32;
   val1, val2: Int32;
@@ -509,7 +591,7 @@ begin
   Result:=CompareValue(val1, val2);
 end;
 
-function Float32Div(const f1, f2: TFloat32): TFloat32;
+function Float32Div(const f1, f2: TRawFloat32): TRawFloat32;
 var
   man1, rawExp1, rawMan1: Int32;
   man2, rawExp2, rawMan2: Int32;
@@ -650,7 +732,7 @@ begin
   Result:= sign or UInt32(rawExp) shl MantissaBits or absMan and $7FFFFF;
 end;
 
-function Float32Mod(const f1, f2: TFloat32): TFloat32;
+function Float32Mod(const f1, f2: TRawFloat32): TRawFloat32;
 var
   uxi, uyi: UInt32;
   ex, ey: Int32;
@@ -754,7 +836,7 @@ begin
   Result:=uxi;
 end;
 
-function Float32ToInt(const f: TFloat32): Int32;
+function Float32ToInt(const f: TRawFloat32): Int32;
 var
   shift: Int32;
   mantissa, value: Int32;
@@ -775,7 +857,7 @@ begin
     Result:=-value;
 end;
 
-function IntToFloat32(const value: Int32):TFloat32;
+function IntToFloat32(const value: Int32):TRawFloat32;
 var
   si: UInt32 absolute value;
   negative: boolean;
@@ -809,7 +891,7 @@ begin
   Result:=FromParts(negative, exponent, UInt32(u));
 end;
 
-function Float32Sqrt(const f1: TFloat32): TFloat32;
+function Float32Sqrt(const f1: TRawFloat32): TRawFloat32;
 var
   f1s: Int32 absolute f1;
   sign: Int32 = Int32($80000000);
@@ -899,7 +981,7 @@ end;
 // ***********************
 // ***** Square Root *****
 // ***********************
-{function Float32Sqrt(const f1: TFloat32): TFloat32;
+{function Float32Sqrt(const f1: TRawFloat32): TRawFloat32;
 var
   f1s: Int32 absolute f1;
 begin
@@ -909,7 +991,7 @@ end;}
 // ********************
 // ***** Absolute *****
 // ********************
-function Float32Abs(const f1: TFloat32): TFloat32;
+function Float32Abs(const f1: TRawFloat32): TRawFloat32;
 var
   f1s: Int32 absolute f1;
 begin
@@ -922,48 +1004,55 @@ end;
 // *******************
 // ***** Inverse *****
 // *******************
-function Float32Inv(const f1: TFloat32): TFloat32;
+function Float32Inv(const f1: TRawFloat32): TRawFloat32;
 var
-  f1s: Int32 absolute f1;
+  //f1s: Int32 absolute f1;
+  s: UInt8;
+  f: TRawFloat32;
 begin
-  Result := Int32($7F000000 - Int64(f1s));
+  //Result := Int32($7F000000 - Int64(f1s));
+  f:=f1;
+  s:=TRawFloat32Rec(f).sign;
+  if s=0 then s:=1 else s:=0;
+  TRawFloat32Rec(f).sign:=s;
+  Result:=f;
 end;
 
 // *******************************
 // ***** Inverse Square Root *****
 // *******************************
-function Float32InvSqrt(const f1: TFloat32): TFloat32;
+function Float32InvSqrt(const f1: TRawFloat32): TRawFloat32;
 var
   f1s: Int32 absolute f1;
 begin
   Result := $5F375A86 - (f1s shr 1);
 end;
 
-function Float32Deg2Rad(const f1: TFloat32): TFloat32;
+function Float32Deg2Rad(const f1: TRawFloat32): TRawFloat32;
 begin
   Result := Float32Mul(f1, $3C8EFA39);
 end;
 
-function Float32Rad2Deg(const f1: TFloat32): TFloat32;
+function Float32Rad2Deg(const f1: TRawFloat32): TRawFloat32;
 begin
   Result := Float32Mul(f1,$42652EE1);
 end;
 
-function Float32Int(const f1: TFloat32): TFloat32;
+function Float32Int(const f1: TRawFloat32): TRawFloat32;
 begin
  exit((IntToFloat32(Float32ToInt(f1))));
 end;
 
 type
   SCRes = Packed record
-	  Si: TFloat32;
-	  Co: TFloat32;
+	  Si: TRawFloat32;
+	  Co: TRawFloat32;
   end;
 
 // ************************************************************
 // ***** Return Sinus and Cosinus of any number in Radian *****
 // ************************************************************
-function Float32CORDIC(const f1: TFloat32): SCRes;
+function Float32CORDIC(const f1: TRawFloat32): SCRes;
 Const
 	D90  = $3FC90FDB; // 1.570796
 	D360 = $40C90FDB; // 6.283185
@@ -977,12 +1066,12 @@ $33800000, $33000000, $32800000, $32000000, $31800000, $31000000, $30800000, $30
 );
 var
 	Res: SCRes;
-	Co, Si, z, v: TFloat32;
-	d, tCo, tSi, tz: TFloat32;
-	rCo, rSi: TFloat32;
+	Co, Si, z, v: TRawFloat32;
+	d, tCo, tSi, tz: TRawFloat32;
+	rCo, rSi: TRawFloat32;
 	i: uint16;
 var
-	AB, Theta: TFloat32;
+	AB, Theta: TRawFloat32;
  Quad: uint16;
 begin
 	AB := Float32Int(Float32Div(f1, D360));
@@ -1046,7 +1135,7 @@ begin
 
 end;
 
-function Float32Sin(const f1: TFloat32): TFloat32;
+function Float32Sin(const f1: TRawFloat32): TRawFloat32;
 var
 	Res: SCRes;
 begin
@@ -1054,7 +1143,7 @@ begin
 	Result := Res.Si;
 end;
 
-function Float32Cos(const f1: TFloat32): TFloat32;
+function Float32Cos(const f1: TRawFloat32): TRawFloat32;
 var
 	Res: SCRes;
 begin
@@ -1062,7 +1151,7 @@ begin
 	Result := Res.Co;
 end;
 
-function Float32Tan(const f1: TFloat32): TFloat32;
+function Float32Tan(const f1: TRawFloat32): TRawFloat32;
 var
 	Res: SCRes;
 begin
@@ -1073,7 +1162,7 @@ begin
 		Result := Float32Div(Res.Si, Res.Co);
 end;
 
-function Float32Cotan(const f1: TFloat32): TFloat32;
+function Float32Cotan(const f1: TRawFloat32): TRawFloat32;
 var
 	Res: SCRes;
 begin
@@ -1084,7 +1173,7 @@ begin
 		Result := Float32Div(Res.Co, Res.Si);
 end;
 
-function Float32Log2(const f1: TFloat32): TFloat32;
+function Float32Log2(const f1: TRawFloat32): TRawFloat32;
 const
   IVLN2HI_U32: UInt32 = $3fb8b000; // 1.4428710938e+00
   IVLN2LO_U32: UInt32 = $b9389ad4; // -1.7605285393e-04
@@ -1093,12 +1182,12 @@ const
   LG3_U32: UInt32 = $3e91e9ee; // 0.28498786688 /*  0x91e9ee.0p-25 */
   LG4_U32: UInt32 = $3e789e26; // 0.24279078841 /*  0xf89e26.0p-26 */
 var
-  x1p25f: TFloat32;
-  hfsq, f, s, z, r, w, t1, t2, hi, lo: TFloat32;
+  x1p25f: TRawFloat32;
+  hfsq, f, s, z, r, w, t1, t2, hi, lo: TRawFloat32;
   ui, ix: UInt32;
   k: Int32;
-  x: TFloat32;
-  lom1, lom2, him, ta, tb: TFloat32;
+  x: TRawFloat32;
+  lom1, lom2, him, ta, tb: TRawFloat32;
 begin
  x := f1;
  x1p25f := $4c000000;
@@ -1161,30 +1250,30 @@ begin
  lo := Float32Add(lo, Float32mul(s, Float32Add(hfsq, r)));  //  lo = f - hi - hfsq + s * (hfsq + r);
 
  //return (lo + hi) * sfloat.FromRaw(IVLN2LO_U32) + lo * sfloat.FromRaw(IVLN2HI_U32) + hi * sfloat.FromRaw(IVLN2HI_U32) + (sfloat)k;
- // lom1, lom2, him, Ret: TFloat32;
+ // lom1, lom2, him, Ret: TRawFloat32;
  lom1 := Float32Mul(Float32Add(lo, hi), IVLN2LO_U32);  //  (lo + hi) * sfloat.FromRaw(IVLN2LO_U32)
  lom2 := Float32Mul(lo, IVLN2HI_U32); //  lo * sfloat.FromRaw(IVLN2HI_U32)
  him := Float32Mul(hi, IVLN2HI_U32); // hi * sfloat.FromRaw(IVLN2HI_U32)
  Result := Float32Add(Float32Add(Float32Add(lom1, lom2), him), IntToFloat32(k)); // lom1 + lom2 + him + k
 end;
 
-function Float32Ln(const f1: TFloat32): TFloat32;
+function Float32Ln(const f1: TRawFloat32): TRawFloat32;
 Const
-  LN2: TFloat32 = $3F317218;
+  LN2: TRawFloat32 = $3F317218;
 begin
   Result := Float32Mul(Float32Log2(f1), LN2);
 end;
 
-function Float32Log10(const f1: TFloat32): TFloat32;
+function Float32Log10(const f1: TRawFloat32): TRawFloat32;
 Const
-  LOG210: TFloat32 = $40549A78;
+  LOG210: TRawFloat32 = $40549A78;
 begin
   Result := Float32Div(Float32Log2(f1), LOG210);
 end;
 
-function Float32IntPow(x: TFloat32; n: Int32): TFloat32;
+function Float32IntPow(x: TRawFloat32; n: Int32): TRawFloat32;
 var
- y: TFloat32;
+ y: TRawFloat32;
 begin
   if (n<0) then
   begin
@@ -1214,9 +1303,9 @@ end;
 
 // Recursive using Int32
 
-function Float32PowInt(f1: TFloat32; i1: Int32): TFloat32;
+function Float32PowInt(f1: TRawFloat32; i1: Int32): TRawFloat32;
 var
-  x: TFloat32;
+  x: TRawFloat32;
   n: Int32;
 begin
   x := f1;
@@ -1344,7 +1433,7 @@ begin
 end;
 
 //warning: conversion does not work for scientific notation (eg. 1.23E-1)
-function TryStrToFloat32(const s: PChar; const len: UInt8; out rValue: TFloat32): boolean;
+function TryStrToFloat32(const s: PChar; const len: UInt8; out rValue: TRawFloat32): boolean;
 const
   FL_ANY       = $01; // any digit was readed
   FL_DOT       = $02; // decimal '.' was
@@ -1489,103 +1578,38 @@ begin
   rValue:=(sign shl 31) or (UInt32(ExponentBias+exp) shl MantissaBits) or (mantissa and $7FFFFF);
 end;
 
-function StrToFloat32(const s: PChar; const len: UInt8; out rerror: boolean): TFloat32;
+function StrToFloat32(const s: PChar; const len: UInt8; out rerror: boolean): TRawFloat32;
 begin
   rError:=not TryStrToFloat32(s, len, Result);
 end;
 
-//Float32 to string conversion
-
-//after https://github.com/bofh453/ftoa-fast
-
-const
-  DIY_SIGNIFICAND_SIZE: UInt32 = 64;
-  SP_SIGNIFICAND_MASK: UInt32 = $7fffff;
-  SP_HIDDEN_BIT: UInt32 = $800000; // 2^23
-
-  // Significands.
-  powers_ten: array[0..77] of Int64 =
-  (
-      $881cea14545c7575, $aa242499697392d3, $d4ad2dbfc3d07788,
-      $84ec3c97da624ab5, $a6274bbdd0fadd62, $cfb11ead453994ba,
-      $81ceb32c4b43fcf5, $a2425ff75e14fc32, $cad2f7f5359a3b3e,
-      $fd87b5f28300ca0e, $9e74d1b791e07e48, $c612062576589ddb,
-      $f79687aed3eec551, $9abe14cd44753b53, $c16d9a0095928a27,
-      $f1c90080baf72cb1, $971da05074da7bef, $bce5086492111aeb,
-      $ec1e4a7db69561a5, $9392ee8e921d5d07, $b877aa3236a4b449,
-      $e69594bec44de15b, $901d7cf73ab0acd9, $b424dc35095cd80f,
-      $e12e13424bb40e13, $8cbccc096f5088cc, $afebff0bcb24aaff,
-      $dbe6fecebdedd5bf, $89705f4136b4a597, $abcc77118461cefd,
-      $d6bf94d5e57a42bc, $8637bd05af6c69b6, $a7c5ac471b478423,
-      $d1b71758e219652c, $83126e978d4fdf3b, $a3d70a3d70a3d70a,
-      $cccccccccccccccd, $8000000000000000, $a000000000000000,
-      $c800000000000000, $fa00000000000000, $9c40000000000000,
-      $c350000000000000, $f424000000000000, $9896800000000000,
-      $bebc200000000000, $ee6b280000000000, $9502f90000000000,
-      $ba43b74000000000, $e8d4a51000000000, $9184e72a00000000,
-      $b5e620f480000000, $e35fa931a0000000, $8e1bc9bf04000000,
-      $b1a2bc2ec5000000, $de0b6b3a76400000, $8ac7230489e80000,
-      $ad78ebc5ac620000, $d8d726b7177a8000, $878678326eac9000,
-      $a968163f0a57b400, $d3c21bcecceda100, $84595161401484a0,
-      $a56fa5b99019a5c8, $cecb8f27f4200f3a, $813f3978f8940984,
-      $a18f07d736b90be5, $c9f2c9cd04674edf, $fc6f7c4045812296,
-      $9dc5ada82b70b59e, $c5371912364ce305, $f684df56c3e01bc7,
-      $9a130b963a6c115c, $c097ce7bc90715b3, $f0bdc21abb48db20,
-      $96769950b50d88f4, $bc143fa4e250eb31, $eb194f8e1ae525fd
-  );
-
-  // Exponents
-  powers_ten_e: array[0..77] of Int8 =
-  (
-      -127, -124, -121, -117, -114, -111, -107, -104, -101,  -98,  -94,  -91,  -88,  -84,  -81,  -78,
-       -74,  -71,  -68,  -64,  -61,  -58,  -54,  -51,  -48,  -44,  -41,  -38,  -34,  -31,  -28,  -24,
-       -21,  -18,  -14,  -11,   -8,   -4,   -1,    2,    5,    9,   12,   15,   19,   22,   25,   29,
-        32,   35,   39,   42,   45,   49,   52,   55,   59,   62,   65,   69,   72,   75,   79,   82,
-        85,   89,   92,   95,   98,  102,  105,  108,  112,  115,  118,  122,  125,  127
-  );
-
-function k_comp(n: Int32): Int32;
+//IncDigits parameter indicates an increasing of digits of the number by rounding (e.g. from 9.99 to 10.00)
+function InternalFloat32ToStr(const s: PChar; const maxlen, decplaces: UInt8; f: TRawFloat32; out IncDigits: boolean): UInt8; inline;
 var
-  ds: TFloat32;
-  k: Int32;
+  Val, Int, TenFrac: TRawFloat32;
+  IntVal, FracVal, Tmp: Int32;
+  Sgn, IntDigits, FracDigits, RndFracDigits, OutDigits, OutLen, i: UInt8;
+  LeadingZeroCnt: Int8;
+  sPtr: PChar;
 begin
-  ds:=Float32Mul(IntToFloat32(n), $3e9a209b {0.30103f});
-  k:=Float32ToInt(ds);
-  if n<0 then
-    Result:=k-1
-  else
-    Result:=k;
-end;
+  IncDigits:=false;
 
-function multiply(x: UInt64; y: UInt32): UInt64;
-var
-  xlo, xhi: UInt64;
-begin
-  xlo:= (x and $ffffffff);
-  xhi:= (x shr 32);
-  Result:=((xhi * y) + ((xlo * y) shr 31));
-end;
+  if maxlen<4 then //unable to convert, buffer to small
+    Exit(0);
 
-//after https://github.com/bofh453/ftoa-fast/blob/master/ftoa.c
-//return length
-function Float32ToStr(const s: PChar; const maxlen: UInt8; f: TFloat32): UInt8;
-var
-  w_lower, w_upper: UInt32;
-  D_upper, D_lower, delta, one, p2: UInt64;
-  c_mk: Int64;
-  c_mku: UInt64 absolute c_mk;
-  f2: TFloat32;
-  ve: Int32;
-  mk: Int32 = 0;
-  kabs: Int32 = 0;
-  len: UInt32 = 0;
-  digit, p1: UInt8;
-  negative: boolean;
-//  si: UInt32 absolute s;
-begin
+  if decplaces>8 then //unable to convert, unsuppotred digits number
+  begin
+    //='DTL'#0 to large decplaces number
+    s[0]:='D';
+    s[1]:='T';
+    s[2]:='L';
+    s[3]:=#0;
+    Exit(3);
+  end;
+
   if IsNan(f) then
   begin
-    //si:=$004E614E; //='NaN'#0
+    //='NaN'#0
     s[0]:='N';
     s[1]:='a';
     s[2]:='N';
@@ -1595,7 +1619,7 @@ begin
 
   if IsInfinity(f) then
   begin
-    //si:=$00666E49; //='Inf'#0
+    //='Inf'#0
     s[0]:='I';
     s[1]:='n';
     s[2]:='f';
@@ -1603,113 +1627,320 @@ begin
     Exit(3);
   end;
 
-  if f=RawZero then
+  if (f<>RawZero) and IsSubnormal(f) then
   begin
-    s[0]:='0';
-    s[1]:='.';
-    s[2]:='0';
+    //='Sub#0
+    s[0]:='S';
+    s[1]:='u';
+    s[2]:='b';
     s[3]:=#0;
-    //si:=$00302E30; //'0.0'#0
     Exit(3);
   end;
 
-  negative:=(f and SignMask)>0;
-  if negative then
+  OutLen:=0;
+
+  if f=RawZero then
   begin
-    s[len]:='-';
-    Inc(len);
-  end;
-
-  f2:=Float32Abs(f);
-  ve:= (f2 shr 23) - 127 - 1;
-  f2:= ((f2 and SP_SIGNIFICAND_MASK) or SP_HIDDEN_BIT);
-  w_upper:= (f2 shl 2) + 2;
-  w_lower:= (f2 shl 2) - 1;
-  if (f2 <> SP_HIDDEN_BIT) then
-    Dec(w_lower);
-  w_upper:=w_upper shl (DIY_SIGNIFICAND_SIZE - 58);
-  w_lower:=w_lower shl (DIY_SIGNIFICAND_SIZE - 58);
-
-  mk:= k_comp(ve - 1);
-  ve:= ve + powers_ten_e[37 - mk] - DIY_SIGNIFICAND_SIZE + 7;
-  one:= (UInt64(1) shl -ve) - 1;
-
-  c_mk:= powers_ten[37 - mk];
-  D_upper:= multiply(c_mku, w_upper);
-  D_lower:= multiply(c_mku, w_lower);
-    //s[0]:='O';
-    //s[1]:='K';
-    //s[2]:=#0;
-    //Exit(2);
-
-  Dec(D_upper);
-  Dec(D_lower);
-
-  delta:= (D_upper - D_lower);
-  p1:= D_upper shr -ve;
-  p2:= D_upper and one;
-
-  digit:= p1 div 10;
-  if (digit>0) then
-  begin
-    s[len]:= chr($30 + digit);
-    Inc(len);
-    s[len]:= '.';
-    Inc(len);
-    Inc(mk);
-  end;
-
-  p1:=p1 mod 10;
-  s[len]:= chr($30 + p1);
-  Inc(len);
-  if (digit=0) then
-  begin
-    s[len]:= '.';
-    Inc(len);
-  end;
-
-  repeat
-    p2:=p2 * 10;
-    s[len]:= chr($30 + (p2 shr -ve));
-    Inc(len);
-    p2:=p2 and one;
-    delta:= delta * 10;
-    if len=maxlen-6 then  Break;
-  until (p2 > delta);
-
-  s[len]:= 'E'; //'e'
-  Inc(len);
-  if(mk < 0) then
-  begin
-    s[len]:= '-';
-    Inc(len);
-    kabs:= -mk;
+    Sgn:=0;
+    IntVal := 0;
+    FracVal := 0;
   end
   else
   begin
-    s[len]:= '+';
-    Inc(len);
-    kabs:= mk;
-  end;
-  s[len]:= chr((kabs div 10)+$30);
-  Inc(len);
-  s[len]:= chr((kabs mod 10)+$30);
-  Inc(len);
-  s[len]:=#0;
+    // Convert Digits to 10^Digits
+    Sgn:= TRawFloat32Rec(f).sign;
 
-  Result:=len;
+    // Here extract Sign
+    Val:=f;
+    Val:=Val and $7FFFFFFF;
+    Int:= Float32Int(Val);
+
+    TenFrac:= Float32Mul(Float32Sub(Val, Int), Float32IntPow(RawTen, decplaces+1)); // Fractional part, adding 1 to digits for rounding
+
+    IntVal := Float32ToInt(Int);
+    FracVal := Float32ToInt(TenFrac);
+  end;
+
+  //Rounding
+  FracDigits:=UInt32Digits(FracVal);
+  IntDigits:=UInt32Digits(IntVal);
+  i:=FracVal mod 10;
+  if i>=5 then
+    Inc(FracVal, 10-i);
+  RndFracDigits:=UInt32Digits(FracVal);
+  if ((RndFracDigits-FracDigits)>0) and ((RndFracDigits-decplaces-1)>0) then
+  begin
+    Inc(IntVal);
+    FracVal:=0;
+    if UInt32Digits(IntVal)>IntDigits then
+      IncDigits:=true;
+  end;
+  FracVal:=FracVal div 10;
+  FracDigits:=UInt32Digits(FracVal);
+  IntDigits:=UInt32Digits(IntVal);
+
+  if (IntVal=0) and (FracVal=0) then
+    Sgn:=0;
+
+  sPtr:=s;
+
+  // Check Sign
+  if (Sgn > 0) then
+  begin
+    sPtr^:='-';
+    Inc(sPtr);
+    Inc(OutLen);
+  end;
+
+  // Convert Integer Part to String
+  Tmp := IntVal;
+  if (Tmp = 0) then
+  begin
+    sPtr^:='0';
+    Inc(sPtr);
+    Inc(OutLen);
+  end
+  else
+  begin
+    while IntDigits>0 do
+    begin
+      sPtr^:=Chr((Tmp div UInt32DigitsArray[IntDigits-1]) + $30);
+      Inc(sPtr);
+      Inc(OutLen);
+
+      if OutLen=(MaxLen-1) then
+      begin
+        sPtr^:=#0;
+        Exit(MaxLen);
+      end;
+
+      Tmp:=Tmp mod UInt32DigitsArray[IntDigits-1];
+      Dec(IntDigits);
+    end;
+  end;
+
+  if decplaces>0 then
+  begin
+    sPtr^:='.';
+    Inc(sPtr);
+    Inc(OutLen);
+  end;
+
+  if OutLen=(MaxLen-1) then
+  begin
+    sPtr^:=#0;
+    Exit(MaxLen);
+  end;
+
+  // Convert Fractional to String
+
+  LeadingZeroCnt:=decplaces-FracDigits;
+  if LeadingZeroCnt>0 then
+    for i:=0 to LeadingZeroCnt-1 do
+    begin
+      sPtr^:='0';
+      Inc(sPtr);
+      Inc(OutLen);
+
+      if OutLen=(MaxLen-1) then
+      begin
+        sPtr^:=#0;
+        Exit(MaxLen);
+      end;
+    end;
+
+  Tmp := FracVal;
+  OutDigits:=decplaces;
+
+  while ((FracDigits>0) and (OutDigits>0)) do
+  begin
+    sPtr^:=Chr((Tmp div UInt32DigitsArray[FracDigits-1]) + $30);
+    Inc(sPtr);
+    Inc(OutLen);
+
+    if OutLen=(MaxLen-1) then
+    begin
+      sPtr^:=#0;
+      Exit(MaxLen);
+    end;
+
+    Tmp:=Tmp mod UInt32DigitsArray[FracDigits-1];
+    Dec(FracDigits);
+    Dec(OutDigits);
+  end;
+
+  sPtr^:=#0;
+  Result:=OutLen;
 end;
 
-function Float32Test(const f1, f2: TFloat32): TFloat32;
+//return length
+//s must indicate an array of char with length of at least 4
+//maxlen - size of s
+//decplaces - depends on number and limitations of TRawFloat32, should work efectively with 0-6 digits
+function Float32ToStr(const s: PChar; const maxlen, decplaces: UInt8; f: TRawFloat32): UInt8;
+var
+  IncDigits: boolean;
+begin
+  Result:=InternalFloat32ToStr(s, maxlen, decplaces, f, IncDigits);
+end;
+
+function Float32ToStrE(const s: PChar; const maxlen, decplaces: UInt8; f: TRawFloat32): UInt8;
+var
+  Val: TRawFloat32;
+  IExp: UInt16;
+  Sgn, OutDigits, Len, Pos: UInt8;
+  P: PChar;
+  IncDigits: boolean;
+begin
+  if maxlen<4 then //unable to convert, buffer to small
+    Exit(0);
+
+  if decplaces>8 then //unable to convert, unsuppotred digits number
+  begin
+    //='DTL'#0 to large decplaces number
+    s[0]:='D';
+    s[1]:='T';
+    s[2]:='L';
+    s[3]:=#0;
+    Exit(3);
+  end;
+
+  OutDigits:=decplaces;
+  if OutDigits<2 then
+    OutDigits:=2;
+
+  //format: -0.[digits including E]-nnn+null terminator -> max 16
+  if maxlen<(OutDigits+8) then
+  begin
+    //='BTS'#0 buffer to small
+    s[0]:='B';
+    s[1]:='T';
+    s[2]:='S';
+    s[3]:=#0;
+    Exit(3);
+  end;
+
+  if IsNan(f) then
+  begin
+    //='NaN'#0
+    s[0]:='N';
+    s[1]:='a';
+    s[2]:='N';
+    s[3]:=#0;
+    Exit(3);
+  end;
+
+  if IsInfinity(f) then
+  begin
+    //='Inf'#0
+    s[0]:='I';
+    s[1]:='n';
+    s[2]:='f';
+    s[3]:=#0;
+    Exit(3);
+  end;
+
+  if (f<>RawZero) and IsSubnormal(f) then
+  begin
+    //='Sub#0
+    s[0]:='S';
+    s[1]:='u';
+    s[2]:='b';
+    s[3]:=#0;
+    Exit(3);
+  end;
+
+  Pos:=0;
+  Val:=f;
+  Sgn := TRawFloat32Rec(Val).sign;
+  P:=s;
+
+  if (Sgn > 0) then
+  begin
+    P^:='-';
+    Inc(P);
+    Inc(Pos);
+  end;
+
+  IExp := 0;
+
+  //Test if Value > 0  without sign
+  if (Float32Abs(Float32Int(Val)) > RawZero) then
+  begin
+    Val:= Float32Abs(Val);
+    while (Float32Comp(Val, RawTen)>0) do
+    begin
+      Inc(IExp);
+      Val:= Float32Div(Val, RawTen);
+    end;
+    Len:=InternalFloat32ToStr(P, maxlen-Pos, OutDigits-1, Val, IncDigits);
+    if IncDigits then
+    begin
+      Inc(IExp);
+      Val:= Float32Div(Val, RawTen);
+      len:= Float32ToStr(P, maxlen-Pos, OutDigits-1, Val);
+    end;
+    Inc(Pos, Len);
+    Inc(P, Len);
+    P^:='E';
+    Inc(P);
+    Inc(Pos);
+    P^:='+';
+    Inc(P);
+    Inc(Pos);
+    Len:=UInt16ToStr(P, maxlen-Pos, 3, IExp);
+    Inc(Pos, Len);
+    Inc(P, Len);
+  end
+  else if (Val <> RawZero) then
+  begin
+    Val:= Float32Abs(Val);
+    while (Float32Comp(Val, RawOne)<0) do
+    begin
+      Inc(IExp);
+      Val:= Float32Mul(Val, RawTen);
+    end;
+    len:=InternalFloat32ToStr(P, maxlen-Pos, OutDigits-1, Val, IncDigits);
+    if IncDigits then
+    begin
+      Dec(IExp);
+      Val:= Float32Div(Val, RawTen);
+      len:= Float32ToStr(P, maxlen-Pos, OutDigits-1, Val);
+    end;
+    Inc(Pos, Len);
+    Inc(P, Len);
+    P^:='E';
+    Inc(P);
+    Inc(Pos);
+    if IExp>0 then P^:='-' else P^:='+';
+    Inc(P);
+    Inc(Pos);
+    Len:=UInt16ToStr(P, maxlen-Pos, 3, IExp);
+    Inc(Pos, Len);
+    Inc(P, Len);
+  end
+  else
+  begin
+    Len:=Float32ToStr(P, maxlen-Pos, decplaces, Val);
+    Inc(Pos, Len);
+    Inc(P, Len);
+  end;
+
+  P^:= #0; //null terminator
+
+  Result:=Pos;
+end;
+
+function Float32Test(const f1, f2: TRawFloat32): TRawFloat32;
 begin
   //write cde to test on Arduino
 end;
 
-function scalbnf(x: TFloat32; n: Int32): TFloat32;
+function scalbnf(x: TRawFloat32; n: Int32): TRawFloat32;
 const
-  x1p127: TFloat32 = $7f000000; // 0x1p127f === 2 ^ 127
-  x1p_126: TFloat32 = $800000; // 0x1p-126f === 2 ^ -126
-  x1p24: TFloat32 = $4b800000; // 0x1p24f === 2 ^ 24
+  x1p127: TRawFloat32 = $7f000000; // 0x1p127f === 2 ^ 127
+  x1p_126: TRawFloat32 = $800000; // 0x1p-126f === 2 ^ -126
+  x1p24: TRawFloat32 = $4b800000; // 0x1p24f === 2 ^ 24
 begin
   if (n > 127) then
   begin
@@ -1736,11 +1967,11 @@ begin
     end;
   end;
 
-  Result:=Float32Mul(x, TFloat32((UInt32($7f + n)) shl 23));
+  Result:=Float32Mul(x, TRawFloat32((UInt32($7f + n)) shl 23));
 end;
 
 // Returns f1 raised to the power f2
-function Float32Pow(const f1, f2: TFloat32): TFloat32;
+function Float32Pow(const f1, f2: TRawFloat32): TRawFloat32;
 const
   BP_0_U32: UInt32 = $3f800000; // 1.0
   BP_1_U32: UInt32 = $3fc00000; // 1.5
@@ -1773,10 +2004,10 @@ const
   IVLN2_H_U32: UInt32 = $3fb8aa00; // 1.4426879883e+00
   IVLN2_L_U32: UInt32 = $36eca570; // 7.0526075433e-06
 var
-  x, y: TFloat32;
-  z, ax, z_h, z_l, p_h, p_l, y1, t1, t2, r, s, sn, t, u, v, w: TFloat32;
+  x, y: TRawFloat32;
+  z, ax, z_h, z_l, p_h, p_l, y1, t1, t2, r, s, sn, t, u, v, w: TRawFloat32;
   i, j, k, yisint, n, hx, hy, ix, iy, _iS: Int32;
-  s2, s_h, s_l, t_h, t_l: TFloat32;
+  s2, s_h, s_l, t_h, t_l: TRawFloat32;
 begin
   x:=f1;
   y:=f2;
@@ -2091,7 +2322,7 @@ begin
 end;
 
 // returns the exponent of f1, i.e. the number e to the power f1.
-function Float32Exp(const f1: TFloat32): TFloat32;
+function Float32Exp(const f1: TRawFloat32): TRawFloat32;
 const
   LN2_HI_U32: UInt32 = $3f317200; // 6.9314575195e-01
   LN2_LO_U32: UInt32 = $35bfbe8e; // 1.4286067653e-06
@@ -2100,16 +2331,16 @@ const
   P1_U32: UInt32 = $3e2aaa8f; // 1.6666625440e-1 /*  0xaaaa8f.0p-26 */
   P2_U32: UInt32 = $bb355215; // -2.7667332906e-3 /* -0xb55215.0p-32 */
 
-  x1p127: TFloat32 = $7f000000; // 0x1p127f === 2 ^ 127
-  //x1p_126: TFloat32 = $800000; // 0x1p-126f === 2 ^ -126  /*original 0x1p-149f    ??????????? */
+  x1p127: TRawFloat32 = $7f000000; // 0x1p127f === 2 ^ 127
+  //x1p_126: TRawFloat32 = $800000; // 0x1p-126f === 2 ^ -126  /*original 0x1p-149f    ??????????? */
 var
-  x, xx, c, y: TFloat32;
+  x, xx, c, y: TRawFloat32;
   hx: UInt32;
   sign: Int32;
   signb: boolean;
   k: Int32;
-  hi, lo: TFloat32;
-  kf: TFloat32;
+  hi, lo: TRawFloat32;
+  kf: TRawFloat32;
 begin
   x:=f1;
   hx:= x;
@@ -2185,6 +2416,269 @@ begin
     Result:=y
   else
     Result:=scalbnf(y, k);
+end;
+
+{ TFloat32 Routines }
+
+constructor TFloat32.Create(f1: TRawFloat32);
+begin
+  RawData.Raw := f1;
+end;
+
+constructor TFloat32.Create(Str: TFloat32String);
+begin
+	RawData.Raw := (StringToFloat32(Str)).RawData.Raw;
+end;
+
+class operator TFloat32.+ (f1, f2: TFloat32): TFloat32;
+begin
+	 Result:=TFloat32(Float32Add(f1.RawData.Raw, f2.RawData.Raw));
+end;
+
+class operator TFloat32.- (f1, f2: TFloat32): TFloat32;
+begin
+	Result:=TFloat32(Float32Sub(f1.RawData.Raw, f2.RawData.Raw));
+end;
+
+class operator TFloat32.* (f1, f2: TFloat32): TFloat32;
+begin
+	Result:=TFloat32(Float32Mul(f1.RawData.Raw, f2.RawData.Raw));
+end;
+
+class operator TFloat32./ (f1, f2: TFloat32): TFloat32;
+begin
+	Result:=TFloat32(Float32Div(f1.RawData.Raw, f2.RawData.Raw));
+end;
+
+class operator TFloat32. = (f1, f2: TFloat32): boolean;
+begin
+	if(f1.RawData.Raw = f2.RawData.Raw) then exit(True);
+		exit(False);
+end;
+
+class operator TFloat32.>(f1, f2: TFloat32): boolean;
+begin
+ if(Float32Comp(f1.RawData.Raw, f2.RawData.Raw) > 0) then Result := True
+	else Result := False;
+end;
+
+class operator TFloat32.<(f1, f2: TFloat32): boolean;
+begin
+ if(Float32Comp(f1.RawData.Raw, f2.RawData.Raw) < 0) then Result := True
+	else Result := False;
+end;
+
+class operator TFloat32.>=(f1, f2: TFloat32): boolean;
+begin
+ if(Float32Comp(f1.RawData.Raw, f2.RawData.Raw) >= 0) then Result := True
+	else Result := False;
+end;
+
+class operator TFloat32.<=(f1, f2: TFloat32): boolean;
+begin
+	if(Float32Comp(f1.RawData.Raw, f2.RawData.Raw) <= 0) then Result := True
+	else Result := False;
+end;
+
+class operator TFloat32.<>(f1, f2: TFloat32): boolean;
+begin
+	if(f1.RawData.Raw = f2.RawData.Raw) then exit(False);
+		exit(True);
+end;
+
+class operator TFloat32.mod (f1, f2: TFloat32): TFloat32;
+begin
+ Result := f1 - f2 * IntFloat32(f1 / f2);
+end;
+
+
+function Int32ToFloat32(const value: Int32):TFloat32;
+begin
+	Result.RawData.Raw := intToFloat32(value);
+end;
+
+function NegFloat32(const f1: TFloat32): TFloat32;
+begin
+	Result.RawData.Raw  := f1.RawData.Raw  xor $80000000;
+end;
+
+function TFloat32.Raw(): UInt32;
+begin
+	Result := RawData.Raw;
+end;
+
+function TFloat32.Sign(): Integer;
+begin
+	result := RawData.Value.sign;
+end;
+
+function TFloat32.Frac(): Integer; //?????
+begin
+	result := RawData.Value.Mantissa;
+end;
+
+function TFloat32.Exp(): Integer;
+begin
+	result := RawData.Value.Exp - 127;
+end;
+
+function SqrtFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Sqrt(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function AbsFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Abs(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function InvFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+ Ret32.RawData.Raw := Float32Inv(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function InvSqrtFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32InvSqrt(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function Deg2RadFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Deg2Rad(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function Rad2DegFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Rad2Deg(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function IntFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Int(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function SinFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Sin(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function CosFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Cos(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function TanFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Tan(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function CotanFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Cotan(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function Log2Float32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Log2(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function LnFloat32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Ln(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function Log10Float32(const f1: TFloat32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32Log10(f1.RawData.Raw);
+	exit(Ret32);
+end;
+
+function IntPowFloat32(f1: TFloat32; n: Int32): TFloat32;
+var
+	Ret32: TFloat32;
+begin
+	Ret32.RawData.Raw := Float32IntPow(f1.RawData.Raw, n);
+	exit(Ret32);
+end;
+
+function StringToFloat32(Str: TFloat32String): TFloat32;
+var
+	Ret: TFloat32;
+	rerror: boolean;
+	Len: integer;
+	x1: Pchar;
+begin
+  Str := Str + #0;
+	Len := Length(Str);
+  if(Len > 0) then x1 := @Str[1] else x1 := Nil;
+	Ret.RawData.Raw := StrToFloat32(x1, Len, rerror);
+	if(rerror) then
+		Ret.RawData.Raw := Ret.RawData.Raw or $FFFFFFFF;
+	exit(Ret);
+end;
+
+function TFloat32.ToInt32(): Int32;
+begin
+	Result := Float32ToInt(RawData.Raw);
+end;
+
+function TFloat32.ToString(DecPlaces: UInt8): TFloat32String;
+var
+  StrRes: array[0..20] of char; //max 1 for minus sign+max 10 of integer part+1 decimal separator+max 8 digits+null terminator
+begin
+  FillChar(StrRes, Sizeof(StrRes), 0); //I do not know why here is hint "Local variable "StrRes" does not seem to be initialized"
+  Float32ToStr(StrRes, Sizeof(StrRes), DecPlaces, RawData.Raw);
+  Result:=StrRes;
+end;
+
+function TFloat32.ToStringE(DecPlaces: UInt8): TFloat32String;
+var
+  StrRes: array[0..15] of char; //-0.[digits including E]-3 signs of exponent+null terminator -> max 16
+begin
+  FillChar(StrRes, Sizeof(StrRes), 0); //I do not know why here is hint "Local variable "StrRes" does not seem to be initialized"
+  Float32ToStrE(StrRes, Sizeof(StrRes), DecPlaces, RawData.Raw);
+  Result:=StrRes;
 end;
 
 end.
