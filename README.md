@@ -1,16 +1,17 @@
 # UnoLib
 
 **UnoLib** is a Pascal library designed for the Arduino Uno platform and [AVRPascal](http://akarwowski.pl/index.php?page=electronics&lang=en) or other editor using FPC 3.3.1 for AVR microcontrollers (e.g. FreePascal IDE, Lazarus).
-It is a translation of a subset of the standard Arduino libraries, adapted as needed for a Pascal environment. Moreover, support for fixed and floating point numbers has been added.
+It is a translation of a subset of the standard Arduino libraries, adapted as needed for a Pascal environment. Moreover, support for fixed-point and floating-point numbers has been added.
 
-Written by @ackarwow in collaboration with @Dzandaa (from 2024)
+Written by @ackarwow in collaboration with @Dzandaa (from 2024).
+Licensed under the MIT License. See LICENSE.txt for details.
 
 ![UnoLib](UnoLib.png)
 
 Library modules included:
 
  - analog.pas - support for analog pins
- - defs.pas - definitions of constatnts, bit manipulations, port support
+ - defs.pas - definitions of constants, bit manipulations, port support
  - dht.pas - support for DHT11/22 sensors
  - digital.pas - support for digital pins
  - ds1302rtc.pas - support for DS1302 real time clock
@@ -20,7 +21,7 @@ Library modules included:
  - i2c.pas - support for I2C communication bus (by @Dzandaa, many thanks to @ccrause)
  - liquidcrystal.pas - support for LCD
  - pulse.pas - routines for reading a pulse on a pin (additional function written by @Dzandaa returns length of the pulse in milliseconds)
- - stringutils.pas - string conversion routiones (by @Dzandaa)
+ - stringutils.pas - string conversion routines (by @Dzandaa)
  - timer.pas - time-related routines
  - tone.pas - square wave tone routines
 
@@ -31,20 +32,18 @@ Documentation is placed in "docs" directory:
  - float32.pdf - documentation for float32.pas unit
  - stringutils.pdf - documentation for stringutils.pas unit
 
-
 The "examples" directory contains simple sample programs using UnoLib modules:
 
  - DS137ZN_RTC_Test.pas - Real Time Clock test using I2C (by @Dzandaa)
  - HMC5883L_Magnetometer_Test.pas - HMC5883L Magnetometer test using I2C (by @Dzandaa)
  - I2CScan.pas - I2C bus scan (by @Dzandaa)
- - pcf8591t_ACDC_Read.pas - ACDC read test (by @Dzandaa)
- - pcf8591t_ACDC_Write.pas - ACDC write test (by @Dzandaa)
+ - pcf8591t_ACDC_Read.pas - AC/DC read test (by @Dzandaa)
+ - pcf8591t_ACDC_Write.pas - AC/DC write test (by @Dzandaa)
  - TestBlink.pas - turns on and off the built-in LED
  - TestBlinkWithoutDelay.pas - turns on and off the built-in LED using Millis
- - TestDHT11.pas - displays information about the temperature and humidity of the air
-from the DHT11 sensor on an external LCD display
+ - TestDHT11.pas - displays temperature and humidity from a DHT11 sensor on an LCD display
  - TestDigital.pas - turns on and off the built-in LED based on the button state
- - TestHC-SR04 - example of using HC-SR04 ultrasonic sensor
+ - TestHC-SR04.pas - example of using HC-SR04 ultrasonic sensor
  - TestLCAutoscroll.pas - scrolls text on the LCD display
  - TestLCBlink.pas - displays the text "hello, world!" on the LCD display
  - TestLCChars.pas - displays non-standard characters on the LCD display
@@ -76,6 +75,10 @@ Lazarus test projects are placed in "tests" directory:
 
 Before compiling a given program, make sure that the library modules listed in the uses section
 have already been compiled.
+
+**Notice:**
+UnoLib is distributed for educational and experimental use with microcontrollers.
+It is not intended for safety-critical or life-support systems.
 
 ## Changes
 
@@ -111,7 +114,7 @@ Many thanks to @ccrause for his suggestions and help
 Thanks to @Dzandaa for suggestions and implementation of THardwareSerial.ReadByte
 
 ### version 0.7 - 18/11/2024 (AVRPascal 2.9)
-changes in hardwareserial.pas:
+Changes in hardwareserial.pas:
 
  - added THardwareSerial.WriteBuff for writing buffer of bytes
  - added THardwareSerial.ReadBuff for reading buffer of bytes
