@@ -29,8 +29,12 @@ The library modules are located in the "lib" directory.
 
 Documentation is placed in "docs" directory:
 
+ - analog.pdf - documentation for analog.pas unit
+ - defs.pdf - documentation for defs.pas unit
+ - digital.pdf - documentation for digital.pas unit
  - float32.pdf - documentation for float32.pas unit
  - stringutils.pdf - documentation for stringutils.pas unit
+ - timer.pdf - documentation for timer.pas unit
 
 The "examples" directory contains simple sample programs using UnoLib modules:
 
