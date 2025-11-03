@@ -141,7 +141,7 @@ const
   EP_DOUBLE_64 = $36; // Other endpoints
   EP_SINGLE_16 = $12;
 
-  {$ifdef FPC_MCU_ARDUINOLEONARDO}
+  {$if defined(FPC_MCU_ARDUINOLEONARDO) or defined(FPC_MCU_ATMEGA32U4)}
   EPDIR	= 0;
   EPTYPE0 = 6;
   EPTYPE1 = 7;
@@ -270,7 +270,7 @@ begin
   UEDATX:= d;
 end;
 
-{$ifdef FPC_MCU_ARDUINOLEONARDO}
+{$if defined(FPC_MCU_ARDUINOLEONARDO) or defined(FPC_MCU_ATMEGA32U4)}
 
 {#define TX_RX_LED_INIT	DDRD |= (1<<5), DDRB |= (1<<0)
 #define TXLED0			PORTD |= (1<<5)
