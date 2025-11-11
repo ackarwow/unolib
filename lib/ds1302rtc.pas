@@ -6,6 +6,8 @@ unit ds1302rtc;
 
 {$mode objfpc}
 
+//based on DS1302 library by Henning Karlsen available on http://www.rinkydinkelectronics.com
+
 interface
 
 const

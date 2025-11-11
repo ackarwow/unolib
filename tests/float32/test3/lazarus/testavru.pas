@@ -25,14 +25,14 @@ const
   F_Tst = 'T'; // Function special test
 
 type
-  TFloat32 = UInt32;
+  TRawFloat32 = UInt32;
 
   TStrVal = array[0..15] of char;
 
   TComData = packed record
     Command: char;     // Test Command
     Func:    char;     // function to test
-    FltVal:  TFloat32; // float32 value (input in FloatToStr, output in StrToFloat)
+    FltVal:  TRawFloat32; // float32 value (input in FloatToStr, output in StrToFloat)
     StrLen:  Int8;     // length of str param (input in StrToFloat, output in FloatToStr) or error in conversion (-1, output in StrToFloat)
     StrVal:  TStrVal;  // Parameter - string value (input in StrToFloat, output in FloatToStr)
   end;
@@ -107,7 +107,7 @@ type
 
     function SendData(Timeout: QWord): boolean;
 
-    function ProceedData(aFunc: char; var aFltVal: TFloat32; var aStrLen: Int8; var aStrVal: TStrVal; aTimeout: integer): boolean;
+    function ProceedData(aFunc: char; var aFltVal: TRawFloat32; var aStrLen: Int8; var aStrVal: TStrVal; aTimeout: integer): boolean;
 
     function WaitForReady(Timeout: QWord): boolean;
 
@@ -516,7 +516,7 @@ end;
 // ***********************************
 // ***** Send Command To Arduino *****
 // ***********************************
-function TTestAVRForm.ProceedData(aFunc: char; var aFltVal: TFloat32; var aStrLen: Int8; var aStrVal: TStrVal; aTimeout: integer): boolean;
+function TTestAVRForm.ProceedData(aFunc: char; var aFltVal: TRawFloat32; var aStrLen: Int8; var aStrVal: TStrVal; aTimeout: integer): boolean;
 begin
   if (not RS232.Active) then
   begin
@@ -578,16 +578,16 @@ begin
   Str(Value:4:8, Result);
 end;
 
-function Float32ToStr(Value: TFloat32): string;
+function Float32ToStr(Value: TRawFloat32): string;
 var
   s: single absolute Value;
 begin
   Str(s:4:8, result);
 end;
 
-function SingleToFloat32(Value: single): TFloat32;
+function SingleToFloat32(Value: single): TRawFloat32;
 var
-  r: TFloat32 absolute Value;
+  r: TRawFloat32 absolute Value;
 begin
   Result:=r;
 end;
@@ -638,11 +638,11 @@ const
   TIMEOUT: integer = 1000;
 var
   s: single;
-  f: TFloat32 absolute s;
+  f: TRawFloat32 absolute s;
   i: UInt8;
   idx: integer;
 
-  FltVal: TFloat32;
+  FltVal: TRawFloat32;
   StrLen: Int8;
   StrVal: TStrVal;
 begin

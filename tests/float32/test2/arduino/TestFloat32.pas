@@ -50,9 +50,9 @@ type
   TComData = packed record
     Command: char;     // Test Command
     Func:    char;    // function to test
-    Param1:  TFloat32; // Parameter1
-    Param2:  TFloat32; // Parameter2
-    RetVal:  TFloat32; // return value of function
+    Param1:  TRawFloat32; // Parameter1
+    Param2:  TRawFloat32; // Parameter2
+    RetVal:  TRawFloat32; // return value of function
   end;
 // you can add Values here for data, must match with Lazarus Code.
 
@@ -83,7 +83,7 @@ begin
   end;
 end;
 
-procedure SetData(Command, Func: char; Param1, Param2, RetVal: TFloat32);
+procedure SetData(Command, Func: char; Param1, Param2, RetVal: TRawFloat32);
 begin
   Buff.Values.Command := Command;
   Buff.Values.Func := Func;
@@ -103,9 +103,9 @@ end;
 
 procedure ProcessData();
 var
-  f1: TFloat32 absolute Buff.Values.Param1;
-  f2: TFloat32 absolute Buff.Values.Param2;
-  f3: TFloat32 absolute Buff.Values.RetVal;
+  f1: TRawFloat32 absolute Buff.Values.Param1;
+  f2: TRawFloat32 absolute Buff.Values.Param2;
+  f3: TRawFloat32 absolute Buff.Values.RetVal;
   i1: Int32;
 begin
   Buff.Values.Command:=H_Receive;

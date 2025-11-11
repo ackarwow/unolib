@@ -33,7 +33,7 @@ type
   TComData = packed record
     Command: char;     // Test Command
     Func:    char;     // function to test
-    FltVal:  TFloat32; // float32 value (input in FloatToStr, output in StrToFloat)
+    FltVal:  TRawFloat32; // float32 value (input in FloatToStr, output in StrToFloat)
     StrLen:  Int8;     // length of str param (input in StrToFloat, output in FloatToStr) or error in conversion (-1, output in StrToFloat)
     StrVal:  TStrVal;  // Parameter - string value (input in StrToFloat, output in FloatToStr)
   end;
@@ -75,7 +75,7 @@ begin
   end;
 end;
 
-procedure SetData(Command, Func: char; FltVal: TFloat32; StrLen: Int8; StrVal:  TStrVal);
+procedure SetData(Command, Func: char; FltVal: TRawFloat32; StrLen: Int8; StrVal:  TStrVal);
 begin
   Buff.Values.Command := Command;
   Buff.Values.Func := Func;
@@ -107,7 +107,7 @@ begin
       else Buff.Values.StrLen:=0;
     end;
   F_Flt: //float to string
-    Buff.Values.StrLen:=Float32ToStr(Buff.Values.StrVal, Buff.Values.StrLen, Buff.Values.FltVal);
+    Buff.Values.StrLen:=Float32ToStr(Buff.Values.StrVal, Buff.Values.StrLen, 6, Buff.Values.FltVal);
   end;
 end;
 

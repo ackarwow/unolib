@@ -65,7 +65,7 @@ const
                             '0.0', 'Nan', 'Inf');
 var
   f1: single;
-  f2, f2a, f2b, f2c: TFloat32;
+  f2, f2a, f2b, f2c: TRawFloat32;
   i: UInt8;
   l1: UInt32 absolute f1;
   l2: UInt32 absolute f2;
@@ -82,7 +82,7 @@ begin
   for i:=Low(aFloats) to High(aFloats) do
   begin
     f1:=Str2Float(aFloats[i]);
-    Float32ToStr(Buff, Sizeof(Buff), l1);
+    Float32ToStr(Buff, Sizeof(Buff), 6, l1);
 
     memOutput.Lines.Add(Format('"%s", single as longint: 0x%s, TFloat32 as string "%s", by Float2Str: %s',
       [aFloats[i], IntTohex(l1), Buff, Float2Str(f1)]));
@@ -196,8 +196,8 @@ end;
 procedure TForm1.cmdTestSinusClick(Sender: TObject);
 var
   s1, s3: single;
-  f1: TFloat32 absolute s1;
-  f2: TFloat32;
+  f1: TRawFloat32 absolute s1;
+  f2: TRawFloat32;
   s2: single absolute f2;
   i: Int16;
 begin
@@ -244,9 +244,9 @@ procedure TForm1.cmdTestLog2Click(Sender: TObject);
 const
   sr: single = 55.3859;
 var
-  fr: TFloat32 absolute sr;
+  fr: TRawFloat32 absolute sr;
 
-  f2: TFloat32;
+  f2: TRawFloat32;
   s2: single absolute f2;
   s3: single;
 begin
@@ -261,9 +261,9 @@ procedure TForm1.cmdTestExpClick(Sender: TObject);
 const
   sp1: single = 1.23456;
 var
-  fp1: TFloat32 absolute sp1;
+  fp1: TRawFloat32 absolute sp1;
 
-  fr: TFloat32;
+  fr: TRawFloat32;
   sr: single absolute fr;
 
   r: single;
@@ -277,12 +277,11 @@ end;
 
 procedure TForm1.cmdTest2StrClick(Sender: TObject);
 const
-  RawTwo: TFloat32 = $40000000;
-  Raw_29_1: TFloat32 = $41E8CCCD; //29.1
+  RawTwo: TRawFloat32 = $40000000;
+  Raw_29_1: TRAwFloat32 = $41E8CCCD; //29.1
 var
   Buff: array[0..30] of char;
-  BuffPtr: PChar;
-  duration, cm: TFloat32;
+  duration, cm: TRawFloat32;
   b: UInt8;
 begin
  duration := IntToFloat32(2328);
@@ -290,7 +289,7 @@ begin
  cm:=Float32Div(Float32Div(duration, RAWTwo), Raw_29_1);
 
  FillChar(Buff, SizeOf(Buff), #0);
- b:=Float32ToStr(Buff,30,cm);
+ b:=Float32ToStr(Buff,30,6, cm);
  if b>0 then
    memOutput.Lines.Add(Format(' Cm: %s', [Buff]));
 
@@ -301,9 +300,9 @@ const
   sp1: single = 2.0;
   ip2: integer = 3;
 var
-  fp1: TFloat32 absolute sp1;
+  fp1: TRawFloat32 absolute sp1;
 
-  fr: TFloat32;
+  fr: TRawFloat32;
   sr: single absolute fr;
 
   r: single;
@@ -322,10 +321,10 @@ const
   sp1: single = -2.0;
   sp2: single = 3.2;
 var
-  fp1: TFloat32 absolute sp1;
-  fp2: TFloat32 absolute sp2;
+  fp1: TRawFloat32 absolute sp1;
+  fp2: TRawFloat32 absolute sp2;
 
-  fr: TFloat32;
+  fr: TRawFloat32;
   sr: single absolute fr;
 
   r: single;

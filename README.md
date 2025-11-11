@@ -29,12 +29,20 @@ The library modules are located in the "lib" directory.
 
 Documentation is placed in "docs" directory:
 
- - analog.pdf - documentation for analog.pas unit
- - defs.pdf - documentation for defs.pas unit
- - digital.pdf - documentation for digital.pas unit
- - float32.pdf - documentation for float32.pas unit
- - stringutils.pdf - documentation for stringutils.pas unit
- - timer.pdf - documentation for timer.pas unit
+- analog.pdf - documentation for analog.pas unit
+- defs.pdf - documentation for defs.pas unit
+- dht.pdf - documentation for dht.pas unit
+- digital.pdf - documentation for digital.pas unit
+- ds1302rtc.pdf - documentation for ds1302rtc.pas unit
+- fix16.pdf - documentation for fix16.pas unit
+- float32.pdf - documentation for float32.pas unit
+- hardwareserial.pdf - documentation for hardwareserial.pas unit
+- liquidcrystal.pdf - documentation for liquidcrystal.pas unit
+- pulse.pdf - documentation for pulse.pas unit
+- stringutils.pdf - documentation for stringutils.pas unit
+- timer.pdf - documentation for timer.pas unit
+- tone.pdf - documentation for tone.pas unit
+- UnoLib_HowToStart.pdf - guide for beginners
 
 The "examples" directory contains simple sample programs using UnoLib modules:
 
@@ -85,6 +93,12 @@ UnoLib is distributed for educational and experimental use with microcontrollers
 It is not intended for safety-critical or life-support systems.
 
 ## Changes
+
+### version 1.2 - 11/11/2025 (AVRPascal 3.4)
+
+- added the ability to use standard operators (+, -, *, /) directly with the TFloat32 type (by @Dzandaa)
+- added new string conversion routines for TFloat32 (by @Dzandaa and @ackarwow)
+- added new "docs" directory containing documentation (PDF files) for most library modules and the *How to start* guide for beginners
 
 ### version 1.1 - 16/08/2025 (AVRPascal 3.3)
 

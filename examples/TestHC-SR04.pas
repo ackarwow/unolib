@@ -32,15 +32,15 @@ Const
   TrigPin=11; // Trigger
   EchoPin=12; // Echo
 
-  RawTwo: TFloat32 = $40000000;
-  Raw_29_1: TFloat32 = $41E8CCCD; //29.1
+  RawTwo: TRawFloat32 = $40000000;
+  Raw_29_1: TRawFloat32 = $41E8CCCD; //29.1
 
 var
    Res: UInt32;
    B: Uint8;
    Buff: array[0..30] of char;
    BuffPtr: PChar;
-   duration, cm: TFloat32;
+   duration, cm: TRawFloat32;
 begin
   //Define inputs and outputs
   pinMode(trigPin, OUTPUT);
@@ -76,7 +76,7 @@ begin
     cm:=Float32Div(Float32Div(duration, RAWTwo), Raw_29_1);
 
     FillChar(Buff, SizeOf(Buff), #0);
-    b:=Float32ToStr(Buff,30,cm);
+    b:=Float32ToStr(Buff,30,2,cm);
     if b>0 then
     begin
       Serial.Write(' Cm: ');

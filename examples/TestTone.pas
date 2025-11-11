@@ -52,7 +52,7 @@ const
 var
   thisNote: UInt8;
   noteDuration, pauseBetweenNotes: UInt16;
-  fpause: TFloat32;
+  fpause: TRawFloat32;
 begin
   // iterate over the notes of the melody:
 

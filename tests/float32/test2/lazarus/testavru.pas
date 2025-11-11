@@ -44,14 +44,14 @@ const
   F_Tst = 'T'; //Function special test
 
 type
-  TFloat32 = UInt32;
+  TRawFloat32 = UInt32;
 
   TComData = packed record
     Command: char;     // Test Command
     Func:    char;    // function to test
-    Param1:  TFloat32; // Parameter1
-    Param2:  TFloat32; // Parameter2
-    RetVal:  TFloat32; // return value of function
+    Param1:  TRawFloat32; // Parameter1
+    Param2:  TRawFloat32; // Parameter2
+    RetVal:  TRawFloat32; // return value of function
   end;
 
 const
@@ -119,7 +119,7 @@ type
 
     function SendData(Timeout: QWord): boolean;
 
-    function ProceedData(aFunc: char; aParam1, aParam2: TFloat32; aTimeout: integer; out rValue: TFloat32): boolean;
+    function ProceedData(aFunc: char; aParam1, aParam2: TRawFloat32; aTimeout: integer; out rValue: TRawFloat32): boolean;
 
     function WaitForReady(Timeout: QWord): boolean;
 
@@ -593,7 +593,7 @@ end;
 // ***********************************
 // ***** Send Command To Arduino *****
 // ***********************************
-function TTestAVRForm.ProceedData(aFunc: char; aParam1, aParam2: TFloat32; aTimeout: integer; out rValue: TFloat32): boolean;
+function TTestAVRForm.ProceedData(aFunc: char; aParam1, aParam2: TRawFloat32; aTimeout: integer; out rValue: TRawFloat32): boolean;
 begin
   if (not RS232.Active) then
   begin
@@ -647,16 +647,16 @@ begin
   Str(Value:4:8, result);
 end;
 
-function Float32ToStr(Value: TFloat32): string;
+function Float32ToStr(Value: TRawFloat32): string;
 var
   s: single absolute Value;
 begin
   Str(s:4:8, result);
 end;
 
-function SingleToFloat32(Value: single): TFloat32;
+function SingleToFloat32(Value: single): TRawFloat32;
 var
-  r: TFloat32 absolute Value;
+  r: TRawFloat32 absolute Value;
 begin
   Result:=r;
 end;
@@ -747,10 +747,10 @@ const
   TIMEOUT: integer = 1000;
 var
   //return value from Arduino
-  f1: TFloat32;
+  f1: TRawFloat32;
   s1: single absolute f1;
   //return value on PC side
-  f2: TFloat32;
+  f2: TRawFloat32;
   s2: single absolute f2;
   //parameters
   s, sParam1, sParam2: single;
