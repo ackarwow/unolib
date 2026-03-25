@@ -1,9 +1,5 @@
 unit fix16;
 
-{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
- {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
-{$ENDIF}
-
 {$mode objfpc}
 
 interface
@@ -18,18 +14,10 @@ interface
   - added Fix16Sqrt
 }
 
-
-{ SizeOf(type):
- longint=4 bytes (signed)
- integer=smallint: 2 bytes (signed)
- word: 2 bytes
- string, shortstring: 256 bytes
-}
-
 {Fix16.h}
 
 type
-  TFix16 = Int32{longint}; //int32_t;
+  TFix16 = Int32; 
 
 const
   FOUR_DIV_PI: TFix16 = $145F3;                //Fix16 value of 4/PI
@@ -49,7 +37,8 @@ const
 
   {versions for FIXMATH_OPTIMIZE_8BIT = optimized for AVR}
 
-  function IntToFix16(const a: Int32{longint}): TFix16;
+  function IntToFix16(const a: Int32): TFix16;
+  function Fix16ToInt(const a: TFix16): Int32;
 
   function Fix16Abs(const x: TFix16): TFix16;
   function Fix16Floor(const x: TFix16): TFix16;
@@ -69,12 +58,12 @@ const
 
 implementation
 
-function IntToFix16(const a: Int32{longint}): TFix16;
+function IntToFix16(const a: Int32): TFix16;
 begin
   Result:=a * fix16_one;
 end;
 
-function Fix16ToInt(const a: TFix16):longint;
+function Fix16ToInt(const a: TFix16): Int32;
 begin
   {$IFDEF FIXMATH_NO_ROUNDING}
     Result:=(a shr 16);
