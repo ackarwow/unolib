@@ -1,7 +1,13 @@
 unit defs;
 
-{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
- {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+{$IFDEF AVRPascal}
+  {$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano))}
+    {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+  {$ENDIF}
+{$ELSE}
+  {$IF NOT (DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
+    {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+  {$ENDIF}
 {$ENDIF}
 
 {$mode objfpc}
@@ -150,9 +156,16 @@ const
 
   MPCM0 = 0;
 
-  //pins_arduino.h
+  //pins_arduino.h (standard)
   SDA = 2;
   SCL = 3;
+  SS   = 10;
+  MOSI = 11;
+  MISO = 12;
+  SCK  = 13;
+
+  INT0 = 0;
+  INT1 = 1;
 
 function ByteToHex(val: UInt8): shortstring;
 //procedure ByteToStr(val: UInt8; var s: string; Digits: UInt8=3);
@@ -275,7 +288,7 @@ end;
 //sfr_defs.h
 function _BV(const aBit: UInt8): UInt8; inline;
 begin
-  Result:=1 shl aBit;
+  Result:=UInt8(1 shl aBit);
 end;
 
 //wiring_private.h

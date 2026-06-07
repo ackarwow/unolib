@@ -1,7 +1,13 @@
 unit digital;
 
-{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
- {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+{$IFDEF AVRPascal}
+  {$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano))}
+    {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+  {$ENDIF}
+{$ELSE}
+  {$IF NOT (DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
+    {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
+  {$ENDIF}
 {$ENDIF}
 
 {$mode objfpc}

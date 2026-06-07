@@ -3,159 +3,159 @@ unit stringutils;
 // ***********************************************
 // ***** Some functions to convert to String *****
 // ***** By Dzandaa ******************************
+// ****  Extended and optimized by ackarwow ******
 // ***********************************************
 
-//{$IF NOT (DEFINED(atmega328p) or DEFINED(arduinouno) or DEFINED(arduinonano) or DEFINED(fpc_mcu_atmega328p) or DEFINED(fpc_mcu_arduinouno) or DEFINED(fpc_mcu_arduinonano))}
-// {$Fatal Invalid controller type, expected: atmega328p, arduinouno, or arduinonano}
-//{$ENDIF}
+//no blocking directive needed
 
 {$mode objfpc}
+
 interface
 
-function UInt8ToHexString(Val: UInt8): String;
-function UInt16toHexString(Val: UInt16): String;
+type
+  TIntString = string[11];
 
-function UInt8ToString(I8: UInt8): String;
-function Int8ToString(I8: Int8): String;
-function UInt16ToString(I16: Int16): String;
-function Int16ToString(I16: Int16): String;
+  {TInt8String  = string[4];
+  TInt16String = string[6];
+  TInt32String = string[11];
+
+  TUInt8String  = string[3];
+  TUInt16String = string[5];
+  TUInt32String = string[10];}
+
+function UInt8ToHexString(const Val: UInt8): TIntString;
+function UInt16ToHexString(Val: UInt16): TIntString;
+
+function UInt8ToString(Val: UInt8): TIntString;
+function Int8ToString(Val: Int8): TIntString;
+function UInt16ToString(Val: UInt16): TIntString;
+function Int16ToString(Val: Int16): TIntString;
+function UInt32ToString(Val: UInt32): TIntString;
+function Int32ToString(Val: Int32): TIntString;
 
 //by @ackarwow
-function UInt32Digits(aVal: UInt32): UInt8;
-function UInt16Digits(aVal: UInt16): UInt8;
+function UInt32Digits(aVal: UInt32): UInt8; inline;
+function UInt16Digits(aVal: UInt16): UInt8; inline;
+function UInt8Digits(aVal: UInt8): UInt8; inline;
+
+function UInt32ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt32): UInt8;
+function Int32ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int32): UInt8;
 
 function UInt16ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt16): UInt8;
 function Int16ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int16): UInt8;
 
+function UInt8ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt8): UInt8;
+function Int8ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int8): UInt8;
+
+function UInt8ToHexStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt8): UInt8;
+function UInt16ToHexStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt16): UInt8;
+
+
 const
+  UInt8DigitsArray: array[0..2] of UInt16=(1, 10, 100);
   UInt16DigitsArray: array[0..4] of UInt16=(1, 10, 100, 1000, 10000);
   UInt32DigitsArray: array[0..9] of UInt32=(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000);
 
 implementation
 
+const
+	HexTab: array [0..15] of char = '0123456789ABCDEF';
+
 // ********************************
 // ***** UInt8 to Hexa String *****
 // ********************************
-function  UInt8ToHexString(Val: UInt8): String;
+function  UInt8ToHexString(const Val: UInt8): TIntString;
 var
-	HexTab: Array [0..15] of char = '0123456789ABCDEF';
-	Str: String;
+  Buff: array[0..2] of char;
 begin
-	Str := HexTab[Val shr 4] + HexTab[Val and $0f];
-	exit(Str);
+  UInt8ToHexStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
 end;
 
 // *********************************
 // ***** UInt16 to Hexa String *****
 // *********************************
-function UInt16toHexString(Val: UInt16): String;
+function UInt16ToHexString(Val: UInt16): TIntString;
 var
-	Str: String;
+  Buff: array[0..4] of char;
 begin
-	Str := UInt8ToHexString(UInt8(Val >> 8));
-	Str := Str + UInt8ToHexString(UInt8(Val and $ff));
-	exit(Str);
+  UInt16ToHexStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
 end;
 
 // ***************************
 // ***** UInt8 to String *****
 // ***************************
-function UInt8ToString(I8: UInt8): String;
+function UInt8ToString(Val: UInt8): TIntString;
 var
-	Valt, Valr: UInt16;
-	Res: String;
+  Buff: array[0..3] of char;
 begin
-
-if(I8 = 0) then exit('0');
-	Res := '';
-	Valt := UINT16(I8);
-	While Valt <> 0 do
-	begin
-		Valr := Valt Div 10;
-		Res := char((Valt - (Valr * 10)) + $30) + Res;
-		Valt := Valr;
-	end;
-	exit(Res);
+  UInt8ToStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
 end;
 
 // **************************
 // ***** Int8 to String *****
 // **************************
-function Int8ToString(I8: Int8): String;
+function Int8ToString(Val: Int8): TIntString;
 var
-	Valt, Valr: UInt16;
-	Res, Sign : String;
+  Buff: array[0..4] of char;
 begin
-if(I8 < 0) then
-begin
-	Sign := '-';
-	I8 := I8 and $7F;
-	I8 := $7F - I8;
-	end
-	else Sign := '';
-	if(I8 = 0) then exit('0');
-
-	Res := '';
-	Valt := UINT16(I8);
-	While Valt <> 0 do
-	begin
-		Valr := Valt Div 10;
-		Res := char((Valt - (Valr * 10)) + $30) + Res;
-		Valt := Valr;
-	end;
-	Res := Sign + Res;
-	exit(Res);
+  Int8ToStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
 end;
 
 // ****************************
 // ***** UInt16 to String *****
 // ****************************
-function UInt16ToString(I16: Int16): String;
+function UInt16ToString(Val: UInt16): TIntString;
 var
-	Valt, Valr: UInt32;
-	Res: String;
+  Buff: array[0..5] of char;
 begin
-	if(I16 = 0) then exit('0');
-	Res := '';
-	Valt := UINT32(I16);
-	While Valt <> 0 do
-	begin
-		Valr := Valt Div 10;
-		Res := char((Valt - (Valr * 10)) + $30) + Res;
-		Valt := Valr;
-	end;
-
-	exit(Res);
+  UInt16ToStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
 end;
 
 // ***************************
 // ***** Int16 to String *****
 // ***************************
-function Int16ToString(I16: Int16): String;
+function Int16ToString(Val: Int16): TIntString;
 var
-	Valt, Valr: UInt32;
-	Res, Sign: String;
+  Buff: array[0..6] of char;
 begin
+  Int16ToStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
+end;
 
-	if(I16 < 0) then
-	begin
-		Sign := '-';
-		I16 := I16 and $7FFF; // Mask Sign
-		I16 := $7FFF - I16;
-	end
-	else Sign := '';
-	if(I16 = 0) then exit('0');
+// ****************************
+// ***** UInt32 to String *****
+// ****************************
+function UInt32ToString(Val: UInt32): TIntString;
+var
+  Buff: array[0..10] of char;
+begin
+  UInt32ToStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
+end;
 
-	Res := '';
-	Valt := UINT32(I16);
-	While Valt <> 0 do
-	begin
-		Valr := Valt Div 10;
-		Res := char((Valt - (Valr * 10)) + $30) + Res;
-		Valt := Valr;
-	end;
-	Res := Sign + Res;
-	exit(Res);
+// ***************************
+// ***** Int32 to String *****
+// ***************************
+function Int32ToString(Val: Int32): TIntString;
+var
+  Buff: array[0..11] of char;
+begin
+  Int32ToStr(Buff, Sizeof(Buff), 0, Val);
+  Result:=Buff;
+end;
+
+//by @ackarwow
+
+function UInt8Digits(aVal: UInt8): UInt8; inline;
+begin
+  if (aVal < UInt8DigitsArray[1]) then Result := 1 else
+  if (aVal < UInt8DigitsArray[2]) then Result := 2 else
+    Result := 3;
 end;
 
 function UInt16Digits(aVal: UInt16): UInt8; inline;
@@ -181,9 +181,9 @@ begin
     Result := 10;
 end;
 
-function UInt16ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt16): UInt8;
+function UInt32ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt32): UInt8;
 var
-  i: UInt16;
+  u: UInt32;
   b: UInt8;
   P, PTmp: PChar;
   LeadingDigits: Int8;
@@ -191,12 +191,12 @@ var
 begin
   OutLen:=0;
 
-  IntDigits:=UInt16Digits(Val);
+  IntDigits:=UInt32Digits(Val);
 
-  if maxlen<(IntDigits+1) then //buffer to small, 1 for null terminator
+  if maxlen<(IntDigits+1) then //buffer too small, 1 for null terminator
     Exit(OutLen);
 
-  if digits>=maxlen then //buffer to small
+  if digits>=maxlen then //buffer too small
     Exit(OutLen);
 
   P:=s;
@@ -210,8 +210,8 @@ begin
     Dec(LeadingDigits);
   end;
 
-  i := Abs(Val);
-  if i=0 then
+  u := Val;
+  if u=0 then
   begin
     P^:= '0';
     Inc(P);
@@ -221,12 +221,12 @@ begin
   begin
     PTmp:=P;
     Inc(PTmp, IntDigits);
-    while (i > 0) do
+    while (u > 0) do
     begin
       Dec(PTmp);
-      b := (i mod 10) + $30;
+      b := (u mod 10) + $30;
       PTmp^:= Chr(b);
-      i := i div 10;
+      u := u div 10;
     end;
     Inc(OutLen, IntDigits);
     Inc(P, IntDigits);
@@ -237,9 +237,9 @@ begin
   Result:=OutLen;
 end;
 
-function Int16ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int16): UInt8;
+function Int32ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int32): UInt8;
 var
-  i: Int16;
+  u: UInt32;
   b: UInt8;
   P, PTmp: PChar;
   LeadingDigits: Int8;
@@ -247,15 +247,25 @@ var
 begin
   OutLen:=0;
 
-  IntDigits:=UInt16Digits(Abs(Val));
+  if Val < 0 then
+  begin
+    if Val = Low(Int32) then
+      u:= $80000000
+    else
+      u:= UInt32(-Val);
+  end
+  else
+    u:= UInt32(Val);
+
+  IntDigits:=UInt32Digits(u);
   SgnDigit:=0;
   if Val<0 then
     Inc(SgnDigit);
 
-  if maxlen<(IntDigits+SgnDigit+1) then //buffer to small, 1 for null terminator
+  if maxlen<(IntDigits+SgnDigit+1) then //buffer too small, 1 for null terminator
     Exit(OutLen);
 
-  if digits>=maxlen then //buffer to small
+  if digits>=maxlen then //buffer too small
     Exit(OutLen);
 
   P:=s;
@@ -276,8 +286,7 @@ begin
     Dec(LeadingDigits);
   end;
 
-  i := Abs(Val);
-  if i=0 then
+  if u=0 then
   begin
     P^:= '0';
     Inc(P);
@@ -287,16 +296,369 @@ begin
   begin
     PTmp:=P;
     Inc(PTmp, IntDigits);
-    while (i > 0) do
+    while (u > 0) do
     begin
       Dec(PTmp);
-      b := (i mod 10) + $30;
+      b := (u mod 10) + $30;
       PTmp^:= Chr(b);
-      i := i div 10;
+      u := u div 10;
     end;
     Inc(OutLen, IntDigits);
     Inc(P, IntDigits);
   end;
+
+  P^:= #0;
+
+  Result:=OutLen;
+end;
+
+function UInt16ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt16): UInt8;
+var
+  u: UInt16;
+  b: UInt8;
+  P, PTmp: PChar;
+  LeadingDigits: Int8;
+  IntDigits, OutLen: UInt8;
+begin
+  OutLen:=0;
+
+  IntDigits:=UInt16Digits(Val);
+
+  if maxlen<(IntDigits+1) then //buffer too small, 1 for null terminator
+    Exit(OutLen);
+
+  if digits>=maxlen then //buffer too small
+    Exit(OutLen);
+
+  P:=s;
+
+  LeadingDigits:=Digits-IntDigits;
+  while LeadingDigits>0 do
+  begin
+    P^:='0';
+    Inc(P);
+    Inc(OutLen);
+    Dec(LeadingDigits);
+  end;
+
+  u := Val;
+  if u=0 then
+  begin
+    P^:= '0';
+    Inc(P);
+    Inc(OutLen);
+  end
+  else
+  begin
+    PTmp:=P;
+    Inc(PTmp, IntDigits);
+    while (u > 0) do
+    begin
+      Dec(PTmp);
+      b := (u mod 10) + $30;
+      PTmp^:= Chr(b);
+      u := u div 10;
+    end;
+    Inc(OutLen, IntDigits);
+    Inc(P, IntDigits);
+  end;
+
+  P^:= #0;
+
+  Result:=OutLen;
+end;
+
+function Int16ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int16): UInt8;
+var
+  u: UInt16;
+  b: UInt8;
+  P, PTmp: PChar;
+  LeadingDigits: Int8;
+  IntDigits, SgnDigit, OutLen: UInt8;
+begin
+  OutLen:=0;
+
+  if Val < 0 then
+  begin
+    if Val = Low(Int16) then
+      u:= 32768
+    else
+      u:= UInt16(-Val);
+  end
+  else
+    u:= UInt16(Val);
+
+  IntDigits:=UInt16Digits(u);
+  SgnDigit:=0;
+  if Val<0 then
+    Inc(SgnDigit);
+
+  if maxlen<(IntDigits+SgnDigit+1) then //buffer too small, 1 for null terminator
+    Exit(OutLen);
+
+  if digits>=maxlen then //buffer too small
+    Exit(OutLen);
+
+  P:=s;
+
+  if SgnDigit>0 then
+  begin
+    P^:='-';
+    Inc(P);
+    Inc(OutLen);
+  end;
+
+  LeadingDigits:=Digits-IntDigits;
+  while LeadingDigits>0 do
+  begin
+    P^:='0';
+    Inc(P);
+    Inc(OutLen);
+    Dec(LeadingDigits);
+  end;
+
+  if u=0 then
+  begin
+    P^:= '0';
+    Inc(P);
+    Inc(OutLen);
+  end
+  else
+  begin
+    PTmp:=P;
+    Inc(PTmp, IntDigits);
+    while (u > 0) do
+    begin
+      Dec(PTmp);
+      b := (u mod 10) + $30;
+      PTmp^:= Chr(b);
+      u := u div 10;
+    end;
+    Inc(OutLen, IntDigits);
+    Inc(P, IntDigits);
+  end;
+
+  P^:= #0;
+
+  Result:=OutLen;
+end;
+
+function UInt8ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt8): UInt8;
+var
+  u: UInt8;
+  b: UInt8;
+  P, PTmp: PChar;
+  LeadingDigits: Int8;
+  IntDigits, OutLen: UInt8;
+begin
+  OutLen:=0;
+
+  IntDigits:=UInt8Digits(Val);
+
+  if maxlen<(IntDigits+1) then //buffer too small, 1 for null terminator
+    Exit(OutLen);
+
+  if digits>=maxlen then //buffer too small
+    Exit(OutLen);
+
+  P:=s;
+
+  LeadingDigits:=Digits-IntDigits;
+  while LeadingDigits>0 do
+  begin
+    P^:='0';
+    Inc(P);
+    Inc(OutLen);
+    Dec(LeadingDigits);
+  end;
+
+  u:= Val;
+  if u=0 then
+  begin
+    P^:= '0';
+    Inc(P);
+    Inc(OutLen);
+  end
+  else
+  begin
+    PTmp:=P;
+    Inc(PTmp, IntDigits);
+    while (u > 0) do
+    begin
+      Dec(PTmp);
+      b := (u mod 10) + $30;
+      PTmp^:= Chr(b);
+      u := u div 10;
+    end;
+    Inc(OutLen, IntDigits);
+    Inc(P, IntDigits);
+  end;
+
+  P^:= #0;
+
+  Result:=OutLen;
+end;
+
+function Int8ToStr(const s: PChar; const maxlen, digits: UInt8; const Val: Int8): UInt8;
+var
+  u: UInt8;
+  b: UInt8;
+  P, PTmp: PChar;
+  LeadingDigits: Int8;
+  IntDigits, SgnDigit, OutLen: UInt8;
+begin
+  OutLen:=0;
+
+  if Val < 0 then
+  begin
+    if Val = Low(Int8) then
+      u:= 128
+    else
+      u:= UInt8(-Val);
+  end
+  else
+    u:= UInt8(Val);
+
+  IntDigits:=UInt8Digits(u);
+  SgnDigit:=0;
+  if Val<0 then
+    Inc(SgnDigit);
+
+  if maxlen<(IntDigits+SgnDigit+1) then //buffer too small, 1 for null terminator
+    Exit(OutLen);
+
+  if digits>=maxlen then //buffer too small
+    Exit(OutLen);
+
+  P:=s;
+
+  if SgnDigit>0 then
+  begin
+    P^:='-';
+    Inc(P);
+    Inc(OutLen);
+  end;
+
+  LeadingDigits:=Digits-IntDigits;
+  while LeadingDigits>0 do
+  begin
+    P^:='0';
+    Inc(P);
+    Inc(OutLen);
+    Dec(LeadingDigits);
+  end;
+
+  if u=0 then
+  begin
+    P^:= '0';
+    Inc(P);
+    Inc(OutLen);
+  end
+  else
+  begin
+    PTmp:=P;
+    Inc(PTmp, IntDigits);
+    while (u > 0) do
+    begin
+      Dec(PTmp);
+      b := (u mod 10) + $30;
+      PTmp^:= Chr(b);
+      u := u div 10;
+    end;
+    Inc(OutLen, IntDigits);
+    Inc(P, IntDigits);
+  end;
+
+  P^:= #0;
+
+  Result:=OutLen;
+end;
+
+function UInt8ToHexStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt8): UInt8;
+var
+  P: PChar;
+  LeadingDigits: Int8;
+  IntDigits: UInt8 = 2;
+  OutLen: UInt8;
+begin
+  OutLen:=0;
+
+  if maxlen<(IntDigits+1) then //buffer too small, 1 for null terminator
+    Exit(OutLen);
+
+  if digits>=maxlen then //buffer too small
+    Exit(OutLen);
+
+  P:=s;
+
+  LeadingDigits:=Digits-IntDigits;
+  while LeadingDigits>0 do
+  begin
+    P^:='0';
+    Inc(P);
+    Inc(OutLen);
+    Dec(LeadingDigits);
+  end;
+
+  P^:=HexTab[Val shr 4];
+  Inc(P);
+  Inc(OutLen);
+
+  P^:=HexTab[Val and $0f];
+  Inc(P);
+  Inc(OutLen);
+
+  P^:= #0;
+
+  Result:=OutLen;
+end;
+
+function UInt16ToHexStr(const s: PChar; const maxlen, digits: UInt8; const Val: UInt16): UInt8;
+var
+  b: UInt8;
+  P: PChar;
+  LeadingDigits: Int8;
+  IntDigits: UInt8 = 4;
+  OutLen: UInt8;
+begin
+  OutLen:=0;
+
+  if maxlen<(IntDigits+1) then //buffer too small, 1 for null terminator
+    Exit(OutLen);
+
+  if digits>=maxlen then //buffer too small
+    Exit(OutLen);
+
+  P:=s;
+
+  LeadingDigits:=Digits-IntDigits;
+  while LeadingDigits>0 do
+  begin
+    P^:='0';
+    Inc(P);
+    Inc(OutLen);
+    Dec(LeadingDigits);
+  end;
+
+  b:=UInt8(Val shr 8);
+
+  P^:=HexTab[b shr 4];
+  Inc(P);
+  Inc(OutLen);
+
+  P^:=HexTab[b and $0f];
+  Inc(P);
+  Inc(OutLen);
+
+  b:=UInt8(Val and $ff);
+
+  P^:=HexTab[b shr 4];
+  Inc(P);
+  Inc(OutLen);
+
+  P^:=HexTab[b and $0f];
+  Inc(P);
+  Inc(OutLen);
 
   P^:= #0;
 
