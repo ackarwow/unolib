@@ -40,6 +40,7 @@ Documentation is placed in "docs" directory:
 - hardwareserial.pdf - documentation for hardwareserial.pas unit
 - liquidcrystal.pdf - documentation for liquidcrystal.pas unit
 - pulse.pdf - documentation for pulse.pas unit
+- spi.pdf - documentation for spi.pas unit
 - stringutils.pdf - documentation for stringutils.pas unit
 - timer.pdf - documentation for timer.pas unit
 - tone.pdf - documentation for tone.pas unit
