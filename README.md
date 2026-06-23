@@ -30,24 +30,26 @@ The library modules are located in the "lib" directory.
 
 Documentation is placed in "docs" directory:
 
-- analog.pdf - documentation for analog.pas unit
-- defs.pdf - documentation for defs.pas unit
-- dht.pdf - documentation for dht.pas unit
-- digital.pdf - documentation for digital.pas unit
-- ds1302rtc.pdf - documentation for ds1302rtc.pas unit
-- fix16.pdf - documentation for fix16.pas unit
-- float32.pdf - documentation for float32.pas unit
-- hardwareserial.pdf - documentation for hardwareserial.pas unit
-- liquidcrystal.pdf - documentation for liquidcrystal.pas unit
-- pulse.pdf - documentation for pulse.pas unit
-- spi.pdf - documentation for spi.pas unit
-- stringutils.pdf - documentation for stringutils.pas unit
-- timer.pdf - documentation for timer.pas unit
-- tone.pdf - documentation for tone.pas unit
-- UnoLib_HowToStart.pdf - guide for beginners
+ - ArduinoISP.pdf - documentation for ArduinoISP.pas example
+ - analog.pdf - documentation for analog.pas unit
+ - defs.pdf - documentation for defs.pas unit
+ - dht.pdf - documentation for dht.pas unit
+ - digital.pdf - documentation for digital.pas unit
+ - ds1302rtc.pdf - documentation for ds1302rtc.pas unit
+ - fix16.pdf - documentation for fix16.pas unit
+ - float32.pdf - documentation for float32.pas unit
+ - hardwareserial.pdf - documentation for hardwareserial.pas unit
+ - liquidcrystal.pdf - documentation for liquidcrystal.pas unit
+ - pulse.pdf - documentation for pulse.pas unit
+ - spi.pdf - documentation for spi.pas unit
+ - stringutils.pdf - documentation for stringutils.pas unit
+ - timer.pdf - documentation for timer.pas unit
+ - tone.pdf - documentation for tone.pas unit
+ - UnoLib_HowToStart.pdf - guide for beginners
 
 The "examples" directory contains simple sample programs using UnoLib modules:
 
+ - ArduinoISP.pas - simple ISP programmer
  - DS137ZN_RTC_Test.pas - Real Time Clock test using I2C (by @Dzandaa)
  - HMC5883L_Magnetometer_Test.pas - HMC5883L Magnetometer test using I2C (by @Dzandaa)
  - I2CScan.pas - I2C bus scan (by @Dzandaa)
