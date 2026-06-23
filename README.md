@@ -99,6 +99,13 @@ It is not intended for safety-critical or life-support systems.
 
 ## Changes
 
+### version 1.3 - 23/06/2026 (AVRPascal 3.8)
+
+- added ArduinoISP.pas simple programmer example (thanks to Christof Biner for the suggestion)
+- added SPI support (spi.pas) and TestILI9163.pas example
+- updated stringutils.pas and defs.pas
+- made minor changes in fix16.pas
+
 ### version 1.2 - 11/11/2025 (AVRPascal 3.4)
 
 - added the ability to use standard operators (+, -, *, /) directly with the TFloat32 type (by @Dzandaa)
